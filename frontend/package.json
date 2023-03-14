@@ -1,7 +1,15 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "dev-web-2023-frontend",
+  "version": "1.0.0",
   "private": true,
+  "description": "This is the frontend package for Informateur.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "\"git+https://github.com/ematthewephec/Dev-Web-2023.git\""
+  },
+  "author": "Gabrielle Cruz",
+  "license": "ISC",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
