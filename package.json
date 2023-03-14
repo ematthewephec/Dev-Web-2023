@@ -4,6 +4,7 @@
   "description": "This is the repository for Informateur, a DEV 3 2023 project.",
   "main": "index.js",
   "scripts": {
+    "server": "nodemon backend/index.js",
     "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
   },
   "repository": {
