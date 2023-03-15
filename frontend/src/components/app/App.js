@@ -2,8 +2,8 @@ import React from 'react';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import IndexPage from './components/indexpage/IndexPage';
-import BasicNavbar from './components/utils/BasicNavbar';
+import IndexPage from '../indexpage/IndexPage';
+import BasicNavbar from '../utils/BasicNavbar';
 
 function App() {
   return (
