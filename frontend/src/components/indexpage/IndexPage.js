@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Axios from 'axios';
+import Card from 'react-bootstrap/Card';
 import {AXIOS_CONFIG, INDEX_URL} from '../utils/Constants';
 //import './FrontPage.css';
 
@@ -19,14 +20,14 @@ function IndexPage(){
     
     return(
         <div className="App front-page">
-            <h1 className="title front-page">Bienvenue chez Informateur</h1>
-            <div className="card">
-                <div className="card-body">
-                    <p className="card-body">
+            <Card>
+                <Card.Body>
+                    <Card.Title>Bienvenue chez Informateur</Card.Title>
+                    <Card.Text>
                         {title}
-                    </p>
-                </div>
-            </div>
+                    </Card.Text>
+                </Card.Body>
+            </Card>
         </div>
     )
 }
