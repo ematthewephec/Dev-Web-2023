@@ -5,7 +5,7 @@ function IndexPage(){
     return(
         <div className="App front-page">
             <h1 className="title front-page">Welcome to Informateur</h1>
-            <div className="card bg-dark">
+            <div className="card">
                 <div className="card-body">
                     <p className="card-body">
                         Le site web pour les abonnements des tuyaux informatiques!
