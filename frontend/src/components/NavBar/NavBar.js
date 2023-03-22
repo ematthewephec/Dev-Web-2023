@@ -1,15 +1,15 @@
 import React from 'react';
-
+import './NavBar.css'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
-import logo from '../../logo.svg';
+import logo from '../../Assests/Logo.jpg';
 
 
 function Navigation(){
     return(
-        <Navbar bg="dark" variant="dark" expand="lg">
+        <Navbar className='navbar'>
             <Container>
                 <Navbar.Brand href="/">
                     <img

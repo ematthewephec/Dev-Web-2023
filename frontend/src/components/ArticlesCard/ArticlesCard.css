@@ -5,7 +5,7 @@
     background-color: #F5D9DD;
     padding: 20px 50px;
     border-radius: 20px;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.35);
+    box-shadow: 5px 5px 15px 0 rgba(0, 0, 0, 0.35);
 }
 .articlestitle{
     margin-top: 10px;
