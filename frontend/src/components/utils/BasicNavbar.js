@@ -1,5 +1,5 @@
 import React from 'react';
-import Navigation from '../common/Navigation';
+import Navigation from '../NavBar/NavBar.js';
 import { Outlet } from 'react-router-dom';
 
 const BasicNavbar = () => {
