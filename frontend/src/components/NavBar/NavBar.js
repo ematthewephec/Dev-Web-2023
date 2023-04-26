@@ -24,7 +24,9 @@ function Navigation(){
                     <Nav className="me-auto">
                         <Nav.Link href="/">Home</Nav.Link>
                         <Nav.Link href='/articles'>Articles</Nav.Link>
-                        <Nav.Link className="bi bi-cart">
+                        <Nav.Link className="bi bi-cart"
+                            href='/basket'
+                        >
                             <img
                                 src={basket}
                                 alt="Basket"

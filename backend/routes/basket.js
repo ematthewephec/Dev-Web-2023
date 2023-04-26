@@ -8,8 +8,8 @@ router.get('/', (req, res) => {
 
 router.get('/:userId', async(req, res) => {
     const userId = req.params.userId;
-    const basketQuery = 'SELECT Products.ProductName, Products.ProductPrice, \
-    ItemQuantity, SUM(Products.ProductPrice * ItemQuantity) AS ProductSubtotal \
+    const basketQuery = 'SELECT ItemIndex, Products.ProductName, \
+    Products.ProductPrice, ItemQuantity \
     FROM Baskets INNER JOIN Users ON Baskets.UserID=Users.UserID INNER JOIN \
     Products ON Baskets.ProductID=Products.ProductID WHERE Baskets.UserID=?';
     const result = await pool.query(basketQuery, userId);
