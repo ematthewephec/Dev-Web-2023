@@ -12,7 +12,7 @@ const corsOptions = {
 
 /* ROUTE IMPORT */
 const products = require('./routes/product');
-
+const facture =require('./routes/facture');
 const app = express();
 
 /* MIDDLEWARE */
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/products', products);
-
+app.use('/facture', facture);
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });

@@ -11,6 +11,7 @@ CREATE TABLE Users (
 CREATE TABLE Products (
     ProductID int NOT NULL AUTO_INCREMENT,
     ProductName varchar(60),
+    ProductQuantity int,
     ProductDesc text,
     ProductPrice decimal(6,2),
     ProductOnSale boolean,
@@ -72,5 +73,5 @@ CREATE TABLE AdminUsers (
     AdminUserEmail varchar(60),
     AdminUserPassword varchar(60),
     AdminAcces boolean,
-    PRIMARY KEY (AdminUserID)  
+    PRIMARY KEY (AdminUserID)
 );
