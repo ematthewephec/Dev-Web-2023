@@ -24,11 +24,11 @@
     color: #CD4153;
     margin-bottom: 10px;
 }
-.articleslink:hover{
-    text-decoration:underline;
-}
 .articlesimg{
     object-fit: cover;
     width: 12em!important;
     height: 12em!important;
+}
+.articlescard {
+    padding: 20px;
 }

@@ -1,4 +1,5 @@
 export const INDEX_URL = `http://localhost:3001/`;
+export const PRODUCT_URL = `http://localhost:3001/products/`;
 
 export const AXIOS_CONFIG = {
     headers: {

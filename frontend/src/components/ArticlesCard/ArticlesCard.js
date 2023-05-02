@@ -1,8 +1,10 @@
 import './ArticlesCard.css';
+import React from 'react';  
 import {Card, Row, Col, Nav} from 'react-bootstrap';
+import {AXIOS_CONFIG, INDEX_URL} from '../utils/Constants';
 import NoImg from '../../Assests/NoImg.jpg';
 
-function ArticlesCard(){
+function ArticlesCard(props){
     return(
         <div className='articlescard'>
             <Card>
@@ -12,21 +14,21 @@ function ArticlesCard(){
                             <Row>
                                 <div className='articlestitle'>
                                     <span>
-                                        <h3>Articles Title</h3>
+                                        <h3>{props.products.ProductName}</h3>
                                     </span>
                                 </div>
                             </Row>
                             <Row>
                                 <div className='articlesresum'>
                                     <span>
-                                        Lorem ipsum dolor sit amet. Et facere esse sit nostrum illo sit rerum delectus ut repellat doloribus non doloribus galisum ut consectetur excepturi et labore quas. Ut quaerat nesciunt non quaerat voluptatibus sit doloremque consequatur!
+                                        {(props.products.ProductDesc)}
                                     </span>
                                 </div>
                             </Row>
                             <Row>
                                 <div className='articleslink'>
                                     <span>
-                                        <Nav.Link href='#'>{'Read more'}</Nav.Link>
+                                        {(props.products.ProductPrice)} €
                                     </span>
                                 </div>
                             </Row>
