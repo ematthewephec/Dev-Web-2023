@@ -1,4 +1,5 @@
 export const INDEX_URL = `http://localhost:3001/`;
+export const PRODUCT_URL = `http://localhost:3001/products/`;
 
 export const AXIOS_CONFIG = {
     headers: {
@@ -6,3 +7,5 @@ export const AXIOS_CONFIG = {
         'Content-Type': 'application/json'
     }
 };
+
+export const BASKET_URL = `http://localhost:3001/baskets`;
