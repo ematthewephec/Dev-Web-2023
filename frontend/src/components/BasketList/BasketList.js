@@ -1,41 +1,34 @@
 import './BasketList.css';
-import React, {useEffect, useState} from 'react';
-import { Container, Card } from 'react-bootstrap';
-import Axios from 'axios';
-import { BASKET_URL } from '../utils/Constants';
+import React from 'react';
+import { Container, Card, ListGroup, Col } from 'react-bootstrap';
 
-function BasketList() {
-    const [basket, setBasket] = useState({});
-    //const [basketSubtotal, setBasketSubtotal] = useState(0);
+function BasketList(props) {
+    const items = props.basket.map((item, index) => 
+        <ListGroup.Item key={index}>
+            <Col>{item.ProductName} * {item.ItemQuantity}</Col>
+            <Col>{item.ProductPrice * item.ItemQuantity}</Col>
+        </ListGroup.Item>
+    );
 
-    const getBasket = async () => {
-        const userId = 1;
-        await Axios.get(`${BASKET_URL}/${userId}`)
-        .then((response) => {
-            setBasket(response.data);
-            console.log(response.data);
-        })
-    }
-
-    useEffect(() => {
-        getBasket();
-    }, []);
+    const subtotal = props.basket.reduce((acc, obj) => acc + (obj.ProductPrice * obj.ItemQuantity), 0);
 
     return(
         <div className='basketList'>
             <Container className='basketList-list'>
-                {Object.keys(basket).length < 1 &&
+                {props.basket.length < 1 &&
                     <>
                         <p> Votre panier est vide! </p>
                     </>
                 }
-                {Object.keys(basket).length >= 1 && 
+                {props.basket.length >= 1 && 
                     <>
                         <Card className="card bg-secondary text-left">
                             <Card.Body className='card-body basket'>
-                                <h5 className="card-title">{basket[0].ProductName} * {basket[0].ItemQuantity}</h5>
-                                <p>Subtotal: {basket[0].ProductPrice}€</p>
-                            </Card.Body>  
+                                <ListGroup>
+                                    {items}
+                                </ListGroup>
+                            </Card.Body>
+                            <p className="text-right">Subtotal: {subtotal}</p>  
                         </Card>
                     </>
                 }
