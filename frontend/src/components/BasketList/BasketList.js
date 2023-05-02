@@ -3,8 +3,8 @@ import React from 'react';
 import { Container, Card, ListGroup, Col } from 'react-bootstrap';
 
 function BasketList(props) {
-    const items = props.basket.map((item, index) => 
-        <ListGroup.Item key={index}>
+    const items = props.basket.map((item) => 
+        <ListGroup.Item key={item.ItemIndex}>
             <Col>{item.ProductName} * {item.ItemQuantity}</Col>
             <Col>{item.ProductPrice * item.ItemQuantity}</Col>
         </ListGroup.Item>
