@@ -8,6 +8,7 @@ import BasicNavbar from '../../components/utils/BasicNavbar';
 import Articles from '../Articles/Articles';
 import Basket from '../Basket/Basket';
 
+
 function App() {
   return (
     <div className="App">
