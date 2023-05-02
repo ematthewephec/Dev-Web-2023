@@ -6,6 +6,7 @@ import Navbar from 'react-bootstrap/Navbar';
 
 import logo from '../../Assests/Logo.jpg';
 
+import basket from '../../Assests/cart.svg';
 
 function Navigation(){
     return(
@@ -24,6 +25,16 @@ function Navigation(){
                     <Nav className="me-auto">
                         <Nav.Link href="/">Home</Nav.Link>
                         <Nav.Link href='/articles'>Articles</Nav.Link>
+                        <Nav.Link className="bi bi-cart"
+                            href='/basket'
+                        >
+                            <img
+                                src={basket}
+                                alt="Basket"
+                                title="Basket"
+                                height="25"
+                            />
+                        </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
