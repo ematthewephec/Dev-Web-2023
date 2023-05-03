@@ -8,17 +8,42 @@ describe('Component rendering test <BasketList />', () => {
       render(
             <BasketList products={FakeBasket}/>
         )
-    })
-    it('removes an item', async () => {
+    });
+
+    it('removes an item from the basket', async () => {
         const basket = [
           { ItemIndex: 1, ProductName: 'Product 1', ItemQuantity: 1, ProductPrice: 10 },
           { ItemIndex: 2, ProductName: 'Product 2', ItemQuantity: 2, ProductPrice: 20 },
           { ItemIndex: 3, ProductName: 'Product 3', ItemQuantity: 3, ProductPrice: 30 }
         ];
         const removeItem = jest.fn();
-        const { getByText } = render(<BasketList basket={basket} removeItem={removeItem} />);
+        render(<BasketList basket={basket} removeItem={removeItem} />);
         const deleteButton = screen.getByText('Delete Item');
         fireEvent.click(deleteButton);
         expect(removeItem).toHaveBeenCalledWith(1);
-      });
+    });
+
+    it('clears the user basket', () => {
+        const basket = [
+          {
+            ItemIndex: 1,
+            ProductName: 'Product 1',
+            ItemQuantity: 1,
+            ProductPrice: 10,
+          },
+          {
+            ItemIndex: 2,
+            ProductName: 'Product 2',
+            ItemQuantity: 2,
+            ProductPrice: 20,
+          },
+        ];
+      
+        const clearBasket = jest.fn();
+        render(<BasketList basket={basket} clearBasket={clearBasket} />);
+      
+        fireEvent.click(screen.getByText('Clear Basket'));
+      
+        expect(clearBasket).toHaveBeenCalled();
+    });
 })
