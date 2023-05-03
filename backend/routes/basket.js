@@ -24,4 +24,11 @@ router.delete('/:userId', async(req, res) => {
     res.status(200).json(result);
 })
 
+router.delete('/:userId/clear', async(req, res) => {
+    const userId = req.params.userId;
+    const basketQuery = 'DELETE FROM Baskets WHERE UserID=?';
+    const result = await pool.query(basketQuery, userId);
+    res.status(200).json(result);
+})
+
 module.exports = router;
