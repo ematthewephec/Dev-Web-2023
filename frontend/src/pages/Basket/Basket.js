@@ -18,6 +18,23 @@ function Basket() {
         })
     }
 
+    const deleteItemFromBasket = (itemIndex) => {
+        const userId = 1;
+        fetch(`${BASKET_URL}/${userId}`, {
+            method: 'DELETE',
+            body: itemIndex ? JSON.stringify({
+                itemIndex: itemIndex
+            }) : null,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((response) => response.json())
+        .then(() => {
+            getBasket();
+        })
+    }
+
     useEffect(() => {
         getBasket();
     }, []);
@@ -28,7 +45,10 @@ function Basket() {
                 <h2>Panier</h2>
             </Container>
             <Container className='basket-list'>
-                <BasketList basket={basket}/>
+                <BasketList 
+                    basket={basket}
+                    removeItem={deleteItemFromBasket}
+                />
             </Container>
         </div>    
     );

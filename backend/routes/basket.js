@@ -16,5 +16,12 @@ router.get('/:userId', async(req, res) => {
     res.status(200).json(result);
 });
 
+router.delete('/:userId', async(req, res) => {
+    const userId = req.params.userId;
+    const itemIndex = req.body.itemIndex;
+    const basketQuery = 'DELETE FROM Baskets WHERE UserID=? AND ItemIndex=?';
+    const result = await pool.query(basketQuery, [userId, itemIndex]);
+    res.status(200).json(result);
+})
 
 module.exports = router;
