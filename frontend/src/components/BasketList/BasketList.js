@@ -39,6 +39,7 @@ function BasketList(props) {
                                 </ListGroup>
                             </Card.Body>
                             <p className="text-right">Subtotal: {subtotal}€</p>  
+                            <Button variant="danger" onClick={() => props.clearBasket()}>Clear Basket</Button>
                         </Card>
                     </>
                 }
