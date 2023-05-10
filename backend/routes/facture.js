@@ -39,7 +39,7 @@ router.post("/:id", async (req, res)=>{
             <tr>
                 <td> `+ orderid +` </td>
                 <td> `+ result[0].ProductName +` </td>
-                <td> `+ result[0].ProductQuantity +` </td>
+                <td> `+ result[0].ItemQuantity +` </td>
                 <td> `+ result[0].OrderDate +` </td>
                 <td> `+ result[0].ProductPrice +`€  </td>
                 <td> `+ result[0].OrderSubtotal +`€  </td>
