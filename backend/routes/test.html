@@ -1,0 +1,71 @@
+// Définition du style de facturation
+const factureStyle = `
+<style>
+    table {
+        border-collapse: collapse;
+        width: 75%;
+        margin: auto;
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    img {
+        margin: 10px;
+        display: block;
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 20px;
+    }
+</style>
+<div>
+    <img src="https://media.discordapp.net/attachments/1100763066557284353/1100764003573186633/SharedScreenshot.jpg?width=293&height=305" width="55" height="55" alt="logolinformateur">
+    <p>Bonjour,<br>L'équipe linformateur vous remercie pour votre commande.<br>Pour confirmer votre commande vous devez la payer par virement bancaire au BE0000000000000
+        avec comme communication votre numéro de commande.<br>Votre commande sera envoyée le lundi de la semaine suivant la réception de votre paiement.
+        <br>En cas de non-paiement dans les 10 jours ouvrables, linformateur annulera votre commande.</p>
+
+    <p><h1>Facturation:</h1></div>
+
+    ${factureStyle}
+
+    <table>
+        <tr>
+            <th>N° de commande</th>
+            <th>Produit</th>
+            <th>Quantité</th>
+            <th>Date</th>
+            <th>Prix</th>
+            <th>Prix Total</th>
+        </tr>
+        <tr>
+            <td>${orderid}</td>
+            <td>${result[0].ProductName}</td>
+            <td>${result[0].ProductQuantity}</td>
+            <td>${result[0].OrderDate}</td>
+            <td>${result[0].ProductPrice}€</td>
+            <td>${result[0].OrderSubtotal}€</td>
+        </tr>
+    </table>
+
+    <div>En vous remerciant, L'équipe linformateur</div>
+
+    <br><br>
+    <a href="https://www.linformateur.tech">Retrouvez-nous sur linformateur.tech</a>
+    <br>
+    <a href="mailto:info@linformateur.tech

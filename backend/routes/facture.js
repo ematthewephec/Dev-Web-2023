@@ -1,4 +1,3 @@
-require('dotenv').config({path: '../../.env'});
 const nodemailer =require("nodemailer")
 const express = require('express');
 const router = express.Router();
@@ -8,7 +7,7 @@ router.post("/:id", async (req, res)=>{
 
     try{
         const orderid = req.params.id;
-        const factureQuery = 'SELECT U.UserName, U.UserEmail, P.ProductName, P.ProductPrice,ProductQuantity,OrderSubtotal, OrderDate FROM Orders INNER JOIN Users as U ON Orders.UserID=U.UserID INNER JOIN Products as P ON Orders.ProductID=P.ProductID WHERE OrderID=?  ';
+        const factureQuery = 'SELECT U.UserName, U.UserEmail, P.ProductName, P.ProductPrice,ItemQuantity,OrderSubtotal, OrderDate FROM Orders INNER JOIN Users as U ON Orders.UserID=U.UserID INNER JOIN Products as P ON Orders.ProductID=P.ProductID WHERE OrderID=?  ';
         const result = await pool.query(factureQuery, orderid);
         console.log(result)
         let HTMLmessage= `  <div>
