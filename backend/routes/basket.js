@@ -15,6 +15,14 @@ router.get('/:userId', async(req, res) => {
     const result = await pool.query(basketQuery, userId);
     res.status(200).json(result);
 });
+router.post('/add/:userId/:productId/:quantity', async(req, res) => {
+    const userId = req.params.userId;
+    const productId = req.params.productId;
+    const quantity = req.params.quantity;
+    const basketQuery = 'INSERT INTO Baskets (UserID, ProductID, ItemQuantity) VALUES (?, ?, ?)';
+    const result = await pool.query(basketQuery, ['1', productId, '1']);
+    res.status(200).json(result);
+});
 
 router.delete('/:userId', async(req, res) => {
     const userId = req.params.userId;

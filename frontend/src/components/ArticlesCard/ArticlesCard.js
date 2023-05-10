@@ -1,10 +1,18 @@
 import './ArticlesCard.css';
 import React from 'react';  
-import {Card, Row, Col, Nav} from 'react-bootstrap';
-import {AXIOS_CONFIG, INDEX_URL} from '../utils/Constants';
+import {Card, Row, Col, Nav, Button} from 'react-bootstrap';
+import {AXIOS_CONFIG, INDEX_URL, BASKET_URL} from '../utils/Constants';
 import NoImg from '../../Assests/NoImg.jpg';
 
 function ArticlesCard(props){
+    function addBasket (){
+        const productId = props.products.ProductID;
+        const quantity = 1;
+        const userId = 1;
+        fetch(BASKET_URL + `/add/${userId}/${productId}/${quantity}`, {
+           method: 'POST',
+        })
+    }
     return(
         <div className='articlescard'>
             <Card>
@@ -25,11 +33,14 @@ function ArticlesCard(props){
                                     </span>
                                 </div>
                             </Row>
-                            <Row>
+                            <Row className='cardInfo'>
                                 <div className='articleslink'>
                                     <span>
                                         {(props.products.ProductPrice)} €
                                     </span>
+                                </div>
+                                <div className='btnBasket'>
+                                    <Button onClick={addBasket}>Ajouter au panier</Button>
                                 </div>
                             </Row>
                         </Col>
