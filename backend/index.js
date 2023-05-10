@@ -13,7 +13,7 @@ const corsOptions = {
 
 /* ROUTE IMPORT */
 const products = require('./routes/product');
-const facture =require('./routes/facture');
+const facture = require('./routes/facture');
 const app = express();
 
 /* MIDDLEWARE */

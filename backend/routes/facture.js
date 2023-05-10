@@ -1,13 +1,12 @@
-const nodemailer =require("nodemailer")
+const nodemailer = require("nodemailer")
 const express = require('express');
 const router = express.Router();
 const pool = require('../helpers/database');
 
 router.post("/:id", async (req, res)=>{
-
     try{
         const orderid = req.params.id;
-        const factureQuery = 'SELECT U.UserName, U.UserEmail, P.ProductName, P.ProductPrice,ItemQuantity,OrderSubtotal, OrderDate FROM Orders INNER JOIN Users as U ON Orders.UserID=U.UserID INNER JOIN Products as P ON Orders.ProductID=P.ProductID WHERE OrderID=?  ';
+        const factureQuery = 'SELECT U.UserName, U.UserEmail, P.ProductName, P.ProductPrice, NumItems, OrderSubtotal, OrderDate FROM Orders INNER JOIN Users as U ON Orders.UserID=U.UserID INNER JOIN Products as P ON Orders.ProductID=P.ProductID WHERE OrderID=?  ';
         const result = await pool.query(factureQuery, orderid);
         console.log(result)
         let HTMLmessage= `  <div>
@@ -39,7 +38,7 @@ router.post("/:id", async (req, res)=>{
             <tr>
                 <td> `+ orderid +` </td>
                 <td> `+ result[0].ProductName +` </td>
-                <td> `+ result[0].ItemQuantity +` </td>
+                <td> `+ result[0].NumItems +` </td>
                 <td> `+ result[0].OrderDate +` </td>
                 <td> `+ result[0].ProductPrice +`€  </td>
                 <td> `+ result[0].OrderSubtotal +`€  </td>
@@ -60,16 +59,17 @@ router.post("/:id", async (req, res)=>{
         const transporter = nodemailer.createTransport({
             host: "pro1.mail.ovh.net",
             port: 587,
-            secure: false,
+            secure:false,
             auth: {
-                Users: "info@linformateur.tech",
-                pass: process.env.SECRETMAIL
+                user: "info@linformateur.tech",
+                pass: process.env.SECRETMAIL,
+
             }
         });
         const mailOptions = {
             from: "info@linformateur.tech",
-            to: result[0].UsersEmail,
-            subject: "Facture de la commande" + orderid,
+            to: result[0].UserEmail,
+            subject: "Facture de la commande N°"+ orderid,
             html: HTMLmessage
         };
         transporter.sendMail(mailOptions);
