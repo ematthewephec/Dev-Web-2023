@@ -11,3 +11,6 @@ INSERT INTO Baskets(UserID, ItemQuantity, ProductID) VALUES
 (1, 2, 1),
 (2, 1, 3);
 
+INSERT INTO Orders(UserID, ProductID, OrderSubtotal, OrderDate, NumItems) VALUES
+(1, 1, 20, NOW(), 2),
+(2, 3, 50, NOW(), 1);
