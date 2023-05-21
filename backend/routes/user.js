@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async(req, res) => {
     try {
-        const userQuery = 'SELECT * FROM Users WHERE UserID=? AND DeletionDate IS NULL;';
+        const userQuery = 'SELECT * FROM Users WHERE DeletionDate IS NULL AND UserID=?';
         const rows = await pool.query(userQuery, req.params.id);
         res.status(200).json(rows);
     } catch (error) {
@@ -24,16 +24,16 @@ router.get('/:id', async(req, res) => {
 router.post('/', async (req, res) => {
     try {
       const {username, email, password} = req.body;
-      const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE UserEmail=? AND DeletionDate IS NULL;';
+      const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
       const emailRows = await pool.query(checkEmailQuery, email);
   
       if (emailRows.length > 0) {
         res.status(409).json({message: 'Email already registered'});
       } else {
-        const currentDate = () => new Date().toLocaleDateString();
+        const creationDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const encryptedPass = await bcrypt.hash(password, saltRounds);
         const registerQuery = 'INSERT INTO Users(UserName, UserEmail, UserPassword, CreationDate) VALUES (?,?,?,?)';
-        const result = await pool.query(registerQuery, [username, email, encryptedPass, currentDate]);
+        const result = await pool.query(registerQuery, [username, email, encryptedPass, creationDate]);
         res.status(200).json({message: 'User registered!'});
       }
     } catch (error) {
