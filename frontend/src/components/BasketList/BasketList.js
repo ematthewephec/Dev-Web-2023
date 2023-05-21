@@ -8,7 +8,7 @@ function BasketList(props) {
             <Row>
                 <Col>{item.ProductName}</Col>
                 <Col>QTY: {item.ItemQuantity}</Col>
-                <Col>{item.ProductPrice * item.ItemQuantity}€</Col>
+                <Col>{(item.ProductPrice * item.ItemQuantity).toFixed(2)}€</Col>
                 <Col>
                     <Button 
                         onClick={() => props.removeItem(item.ItemIndex)}
@@ -20,7 +20,7 @@ function BasketList(props) {
         </ListGroup.Item>
     );
 
-    const subtotal = props.basket.reduce((acc, obj) => acc + (obj.ProductPrice * obj.ItemQuantity), 0);
+    const subtotal = props.basket.reduce((acc, obj) => acc + Number((obj.ProductPrice * obj.ItemQuantity).toFixed(2)), 0).toFixed(2);
     
     return(
         <div className='basketList'>
@@ -39,6 +39,7 @@ function BasketList(props) {
                                 </ListGroup>
                             </Card.Body>
                             <p className="text-right">Subtotal: {subtotal}€</p>  
+                            <Button variant="danger" onClick={() => props.clearBasket()}>Clear Basket</Button>
                         </Card>
                     </>
                 }
