@@ -11,7 +11,8 @@ CREATE TABLE Users (
 CREATE TABLE Sessions(
     SessionIndex int NOT NULL AUTO_INCREMENT,
     UserID int,
-    SessionToken varchar(60),
+    AccessToken TEXT,
+    RefreshToken TEXT,
     PRIMARY KEY (SessionIndex),
     FOREIGN KEY (UserID) references Users(UserID)
 );
