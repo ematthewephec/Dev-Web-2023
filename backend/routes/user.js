@@ -5,7 +5,7 @@ const pool = require('../helpers/database');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const getCurrentDate = require('../helpers/utils');
-//const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 router.get('/', async (req, res) => {
     res.status(200).send("This is the user route of the API!");
@@ -47,7 +47,7 @@ router.patch('/:id/delete', async (req, res) => {
         const checkUserQuery = 'SELECT * FROM Users WHERE DeletionDate IS NOT NULL AND UserID=?';
         const userRows = await pool.query(checkUserQuery, userId);
 
-        if (userRows.length > 0) {
+        if (userRows.length === 0) {
             res.status(404).json({message: 'User not found.'});
         } else {
             const deletionDate = getCurrentDate();
@@ -58,6 +58,13 @@ router.patch('/:id/delete', async (req, res) => {
     } catch (error) {
       res.status(404).send(error.message);
     }
+});
+
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
+    const emailRows = await pool.query(checkEmailQuery, email);
+
 });
 
 module.exports = router;
