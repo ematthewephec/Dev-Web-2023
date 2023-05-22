@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
-//const config = require('../config/auth.conf')
 const pool = require('../helpers/database');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const getCurrentDate = require('../helpers/utils');
-const jwt = require('jsonwebtoken');
 
 router.get('/', async (req, res) => {
     res.status(200).send("This is the user route of the API!");
@@ -58,13 +56,6 @@ router.patch('/:id/delete', async (req, res) => {
     } catch (error) {
       res.status(404).send(error.message);
     }
-});
-
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
-    const emailRows = await pool.query(checkEmailQuery, email);
-
 });
 
 module.exports = router;

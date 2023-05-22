@@ -8,6 +8,14 @@ CREATE TABLE Users (
     PRIMARY KEY (UserID)
 );
 
+CREATE TABLE Sessions(
+    SessionIndex int NOT NULL AUTO_INCREMENT,
+    UserID int,
+    SessionToken varchar(60),
+    PRIMARY KEY (SessionIndex),
+    FOREIGN KEY (UserID) references Users(UserID)
+);
+
 CREATE TABLE Products (
     ProductID INT NOT NULL AUTO_INCREMENT,
     ProductName VARCHAR(60),
