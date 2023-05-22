@@ -6,8 +6,8 @@ const PORT = process.env.PORT || 3001;
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-//const session = require('express-session');
-//const config = require('./config/auth.conf');
+const session = require('express-session');
+const config = require('./config/auth.conf');
 
 const cors = require('cors');
 const corsOptions = {
@@ -27,8 +27,8 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
-//app.use(session(config));
-//app.use(cookieParser())
+app.use(session(config));
+app.use(cookieParser())
 
 /* API */
 app.get('/', (req, res) => {
