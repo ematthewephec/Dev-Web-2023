@@ -21,13 +21,12 @@ const fetchUserTokens = async (userId) => {
         'SELECT * FROM Sessions WHERE UserID = ?',
         userId
     );
-    if (result.length === 0) return {};
 
-    const { accessToken, refreshToken } = result;
+    const { accessToken, refreshToken } = result[0] || {};
     
-    const decodedAccessToken = jwt.decode(accessToken);
-    const decodedRefreshToken = jwt.decode(refreshToken);
-    
+    const decodedAccessToken = jwt.decode(accessToken) || {};
+    const decodedRefreshToken = jwt.decode(refreshToken) || {};
+
     if (decodedAccessToken.exp < Date.now() / 1000) {
         accessToken = null;
     }
@@ -38,6 +37,33 @@ const fetchUserTokens = async (userId) => {
 
     return { accessToken, refreshToken };
 };
+
+const deleteUserSession = async (token) => {
+    const tokenResult = await pool.query(
+        'SELECT * FROM Sessions WHERE AccessToken = ?',
+        token
+    );
+
+    const { accessToken, refreshToken } = result[0] || {};
+    
+    const decodedAccessToken = jwt.decode(accessToken) || {};
+    const decodedRefreshToken = jwt.decode(refreshToken) || {};
+
+    if (decodedAccessToken.exp < Date.now() / 1000) {
+        accessToken = null;
+    }
+
+    if (decodedRefreshToken.exp < Date.now() / 1000) {
+        refreshToken = null;
+    }
+
+    const clearResult = await pool.query(
+        'UPDATE Sessions SET AccessToken=?, RefreshToken=? WHERE AccessToken=?',
+        [accessToken, refreshToken, token]
+    );
+
+    return { accessToken, refreshToken };
+}
 
 router.post('/login', async (req, res) => {
     try {
@@ -108,15 +134,20 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
     try {
-      res.clearCookie('access_token', {path: '/'});
-      res.status(200).json({message: 'Logout successful!'});
-      return res.end();
+        const token = req.cookies.access_token;
+        console.log(token); // log the access_token cookie value
+        
+        await deleteUserSession(token);
+
+        res.clearCookie('access_token', {path: '/'});
+        res.status(200).json({message: 'Logout successful!'});
+        return res.end();
     } catch (error) {
-      res.status(400).json({message: 'Cookie isn\'t cleared'});
+        res.status(400).json({message: 'Cookie isn\'t cleared'});
     }
-  });
+});
 
 router.use(require('../helpers/tokenChecker'));
 
