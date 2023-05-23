@@ -1,6 +1,5 @@
 import './Footer.css';
-import react from 'react';
-import React,{ useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Navbar, Container, Col, Row } from 'react-bootstrap';
 
 import logo from '../../Assests/Logo.jpg';
@@ -12,7 +11,7 @@ import tiktok from '../../Assests/tiktok.svg';
 
 function Footer() {
     return (
-        <Footer className="footer">
+        <footer className="footer"> 
             <Container>
                 <Col>
                     <img
@@ -25,27 +24,26 @@ function Footer() {
                 <Col>
                     <Row>
                         <Col>
-                        <img src={twitter} alt='twiter' height={25}/>
+                            <img src={twitter} alt='twiter' height={25} />
                         </Col>
                         <Col>
-                        <img src={instagram} alt='instagram' height={25}/>
+                            <img src={instagram} alt='instagram' height={25} />
                         </Col>
                         <Col>
-                        <img src={facebook} alt='facebook' height={25}/>
+                            <img src={facebook} alt='facebook' height={25} />
                         </Col>
                     </Row>
                     <Row>
-                    <Col>
-                        <img src={youtube} alt='youtube' height={25}/>
+                        <Col>
+                            <img src={youtube} alt='youtube' height={25} />
                         </Col>
                         <Col>
-                        <img src={tiktok} alt='tiktok' height={25}/>
+                            <img src={tiktok} alt='tiktok' height={25} />
                         </Col>
                     </Row>
                 </Col>
-
             </Container>
-        </Footer>
+        </footer>
     )
 }
 

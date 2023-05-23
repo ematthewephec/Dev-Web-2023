@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import ArticlesCard from '../../components/ArticlesCard/ArticlesCard';
 import {Container, Row, Col, Button } from 'react-bootstrap';
 import { PRODUCT_URL } from '../../components/utils/Constants';
+import Footer from '../../components/Footer/Footer';
 
 
 
@@ -43,6 +44,7 @@ function Articles(){
                     })
                 }
             </Container>
+            <Footer />
         </div>
     );
 }
