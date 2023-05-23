@@ -7,6 +7,7 @@ import BasicNavbar from '../../components/utils/BasicNavbar';
 
 import Articles from '../Articles/Articles';
 import Basket from '../Basket/Basket';
+import Connections from '../Connections/Connections';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route element={<BasicNavbar/>}>
           <Route exact path="/" element={<IndexPage/>} />
           <Route exact path='/articles' element={<Articles/>}/>
+          <Route exact path='/register' element={<Connections/>}/>
           <Route exact path='/basket' element={<Basket/>}/>
         </Route>
       </Routes>
