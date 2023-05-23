@@ -27,7 +27,13 @@
 .App-link {
   color: #61dafb;
 }
-
+button{
+  background-color: #CD4153!important;
+  border: none!important;
+}
+.row.cardInfo{
+  text-align: left!important;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
