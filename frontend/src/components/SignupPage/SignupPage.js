@@ -14,7 +14,7 @@ const SignupPage = () => {
     country: '',
   });
 
-  const sendForm = async (formData) => {
+  const sendForm = (formData) => {
     fetch(`${USER_URL}`, {
         method: 'POST',
         body: formData ? JSON.stringify({
@@ -33,10 +33,10 @@ const SignupPage = () => {
             'Content-Type': 'application/json',
         }
     })
-    .then((response) => {
-        if(!response) return;
-        window.location.href('/');
-    })
+    .then((response) => response.json())
+    .then(() => {
+        window.location.replace('/');
+    });
   };
 
   useEffect(() => {
@@ -153,7 +153,7 @@ const SignupPage = () => {
                                     <Form.Label>Numero:</Form.Label>
                                     <Form.Control
                                         type="number"
-                                        name="houseNumber"
+                                        name="houseNum"
                                         value={formData.houseNum}
                                         onChange={handleChange}
                                         required

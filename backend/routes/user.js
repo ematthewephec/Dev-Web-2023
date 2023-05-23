@@ -34,14 +34,14 @@ router.post('/', async (req, res) => {
         const creationDate = getCurrentDate();
         const encryptedPass = await bcrypt.hash(password, saltRounds);
         const registerQuery = 'INSERT INTO Users(UserName, UserEmail, UserPassword, CreationDate) VALUES (?,?,?,?)';
-        await pool.query(registerQuery, [username, email, encryptedPass, creationDate]);
+        const userResult = await pool.query(registerQuery, [username, email, encryptedPass, creationDate]);
 
-        const userId = result.insertId;
+        const userId = userResult.insertId;
         const {street, postalCode, country} = addressInfo;
         const addressQuery = 'INSERT INTO Addresses(UserID, Street, Postcode, Country) VALUES (?,?,?,?)';
-        await pool.query(addressQuery, [userId, street, postalCode, country]);
+        const addressResult = await pool.query(addressQuery, [userId, street, postalCode, country]);
         
-        res.status(200).json({message: 'User registered!'});
+        res.status(200).json({message: `User ${userId} registered!`});
       }
     } catch (error) {
       res.status(400).send(error.message);
