@@ -1,4 +1,25 @@
 .footer{
     background-color:  #CD4153;
-    padding: 20px;
+    padding-block: 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
+
+.footer .container{
+    column-count: 2;
+}
+.logo {
+    display: flex;
+  }
+  
+  .social-media {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .social-media img {
+    margin-left: 10px;
+  }
+  

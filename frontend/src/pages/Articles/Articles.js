@@ -44,7 +44,7 @@ function Articles(){
                     })
                 }
             </Container>
-            <Footer />
+            
         </div>
     );
 }

@@ -7,6 +7,7 @@ import BasicNavbar from '../../components/utils/BasicNavbar';
 
 import Articles from '../Articles/Articles';
 import Basket from '../Basket/Basket';
+import Footer from '../../components/Footer/Footer';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route exact path='/basket' element={<Basket/>}/>
         </Route>
       </Routes>
+      <Footer/>
     </div>
   );
 }
