@@ -1,15 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Card, Row, Col } from 'react-bootstrap';
+import { USER_URL } from '../utils/Constants';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
+    email: '',
+    password: '',
     address: '',
     postalCode: '',
     streetNumber: '',
     country: '',
   });
+
+  const sendForm = async (formData) => {
+    fetch(`${USER_URL}`, {
+        method: 'POST',
+        body: formData ? JSON.stringify({
+            credentials: {
+                username: `${formData.firstName} ${formData.lastName}`,
+                email: formData.email,
+                password: formData.password
+            },
+            addressInfo: {
+                street: `${formData.address} ${formData.streetNumber}`,
+                postalCode: formData.postalCode,
+                country: formData.country
+            }
+        }) : null,
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then((response) => {
+        if(!response) return;
+        window.location.href('/');
+    })
+  };
 
   useEffect(() => {
     console.log(formData);
@@ -34,6 +62,7 @@ const SignupPage = () => {
       postalCode: '',
       country: '',
     });
+    sendForm(formData);
   };
 
   return (

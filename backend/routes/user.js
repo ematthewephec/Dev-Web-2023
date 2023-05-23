@@ -23,7 +23,8 @@ router.get('/:id', async(req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-      const {username, email, password} = req.body;
+      const {credentials, addressInfo} = req.body;
+      const {username, email, password} = credentials
       const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
       const emailRows = await pool.query(checkEmailQuery, email);
   
@@ -33,7 +34,13 @@ router.post('/', async (req, res) => {
         const creationDate = getCurrentDate();
         const encryptedPass = await bcrypt.hash(password, saltRounds);
         const registerQuery = 'INSERT INTO Users(UserName, UserEmail, UserPassword, CreationDate) VALUES (?,?,?,?)';
-        const result = await pool.query(registerQuery, [username, email, encryptedPass, creationDate]);
+        await pool.query(registerQuery, [username, email, encryptedPass, creationDate]);
+
+        const userId = result.insertId;
+        const {street, postalCode, country} = addressInfo;
+        const addressQuery = 'INSERT INTO Addresses(UserID, Street, Postcode, Country) VALUES (?,?,?,?)';
+        await pool.query(addressQuery, [userId, street, postalCode, country]);
+        
         res.status(200).json({message: 'User registered!'});
       }
     } catch (error) {

@@ -9,3 +9,4 @@ export const AXIOS_CONFIG = {
 };
 
 export const BASKET_URL = `http://localhost:3001/baskets`;
+export const USER_URL = `http://localhost:3001/users`;
