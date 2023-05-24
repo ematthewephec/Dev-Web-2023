@@ -1,5 +1,3 @@
-user.js:
-```js
 const express = require('express');
 const router = express.Router();
 //const config = require('../config/auth.conf')
@@ -43,7 +41,7 @@ router.post('/', async (req, res) => {
         const addressQuery = 'INSERT INTO Addresses(UserID, Street, Postcode, Country) VALUES (?,?,?,?)';
         const addressResult = await pool.query(addressQuery, [userId, street, postalCode, country]);
 
-        res.status(200).json({message: User ${userId} registered!});
+        res.status(200).json({message: `User ${userId} registered!`});
       }
     } catch (error) {
       res.status(400).send(error.message);
@@ -75,5 +73,5 @@ router.post('/login', async (req, res) => {
     const emailRows = await pool.query(checkEmailQuery, email);
 
 });
+
 module.exports = router;
-```

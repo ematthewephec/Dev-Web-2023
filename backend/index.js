@@ -16,7 +16,7 @@ const corsOptions = {
     methods: ['GET', 'POST', 'DELETE']
 };
 
-/* ROUTE IMPORT /
+/* ROUTE IMPORT */
 const products = require('./routes/product');
 const baskets = require('./routes/basket');
 const users = require('./routes/user');
@@ -24,14 +24,14 @@ const sessions = require('./routes/sessions');
 
 const app = express();
 
-/ MIDDLEWARE /
+/* MIDDLEWARE */
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session(config));
 app.use(cookieParser())
 
-/ API */
+/* API */
 app.get('/', (req, res) => {
     res.status(200).send("Le site web pour les abonnements des tuyaux informatiques!");
 });
@@ -42,5 +42,5 @@ app.use('/users', users);
 app.use('/sessions', sessions);
 
 app.listen(PORT, () => {
-    console.log(Server listening on ${PORT});
+    console.log(`Server listening on ${PORT}`);
 });
