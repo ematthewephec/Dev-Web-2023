@@ -15,13 +15,12 @@ function App() {
   return (
     <div className="App">
       <Router>
+        <BasicNavbar/>
         <Routes>
-          <Route element={<BasicNavbar/>}>
-            <Route exact path="/" element={<IndexPage/>} />
-            <Route exact path='/articles' element={<Articles/>}/>
-            <Route exact path='/connect' element={<Connections/>}/>
-            <Route exact path='/basket' element={<Basket/>}/>
-          </Route>
+          <Route path="/" element={<IndexPage/>} />
+          <Route path='/articles' element={<Articles/>}/>
+          <Route path='/connect' element={<Connections/>}/>
+          <Route path='/basket' element={<Basket/>}/>
         </Routes> 
         <Footer/>
       </Router>
