@@ -6,6 +6,8 @@ const PORT = process.env.PORT || 3001;
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+//const session = require('express-session');
+//const config = require('./config/auth.conf');
 
 const cors = require('cors');
 const corsOptions = {
@@ -16,6 +18,7 @@ const corsOptions = {
 /* ROUTE IMPORT */
 const products = require('./routes/product');
 const baskets = require('./routes/basket');
+const users = require('./routes/user');
 
 const app = express();
 
@@ -23,6 +26,8 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
+//app.use(session(config));
+//app.use(cookieParser())
 
 /* API */
 app.get('/', (req, res) => {
@@ -31,6 +36,7 @@ app.get('/', (req, res) => {
 
 app.use('/products', products);
 app.use('/baskets', baskets);
+app.use('/users', users);
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
