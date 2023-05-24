@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import Axios from 'axios';
 import Card from 'react-bootstrap/Card';
-import {AXIOS_CONFIG, INDEX_URL} from '../utils/Constants';
+import {INDEX_URL} from '../utils/Constants';
 //import './FrontPage.css';
 
 function IndexPage(){
     const [title, setTitle] = useState("");
 
     const getIndexHello = async () => {
-        Axios.get(INDEX_URL)
+        fetch(`${INDEX_URL}`)
         .then((response) => {
             setTitle(response.data)
         });

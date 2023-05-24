@@ -26,7 +26,7 @@ function Navigation(){
                     <Nav className="me-auto">
                         <Nav.Link href="/">Home</Nav.Link>
                         <Nav.Link href='/articles'>Articles</Nav.Link>
-                        <Nav.Link href='/register'>Login/Register</Nav.Link>
+                        <Nav.Link href='/connect'>Login/Register</Nav.Link>
                         <Nav.Link className="bi bi-cart"
                             href='/basket'
                         >
