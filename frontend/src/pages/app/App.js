@@ -7,7 +7,7 @@ import BasicNavbar from '../../components/utils/BasicNavbar';
 
 import Articles from '../Articles/Articles';
 import Basket from '../Basket/Basket';
-import Connections from '../Connections/Connections';
+import Connections from '../connections/Connections';
 import Footer from '../../components/Footer/Footer';
 
 
