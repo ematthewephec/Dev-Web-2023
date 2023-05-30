@@ -14,8 +14,8 @@ const SignupPage = () => {
     country: '',
   });
 
-  const sendForm = (formData) => {
-    fetch(`${USER_URL}`, {
+  const sendForm = async (formData) => {
+    await fetch(`${USER_URL}`, {
         method: 'POST',
         body: formData ? JSON.stringify({
             credentials: {
@@ -38,10 +38,6 @@ const SignupPage = () => {
         window.location.replace('/');
     });
   };
-
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

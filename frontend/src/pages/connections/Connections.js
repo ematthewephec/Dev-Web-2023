@@ -1,6 +1,7 @@
 import React from 'react';
 import {Col, Row} from 'react-bootstrap';
 import SignupPage from '../../components/SignupPage/SignupPage';
+import LoginPage from '../../components/LoginPage/LoginPage';
 
 function Connections(){
     return(
@@ -8,6 +9,9 @@ function Connections(){
             <Row>
                 <Col>
                     <SignupPage/>
+                </Col>
+                <Col>
+                    <LoginPage/>
                 </Col>
             </Row>
         </>

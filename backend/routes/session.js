@@ -65,8 +65,7 @@ const deleteUserSession = async (token) => {
     return { accessToken, refreshToken };
 }
 
-
-router.post('/login', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const { email, password } = req.body;
         const checkEmailQuery = 'SELECT * FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
@@ -109,7 +108,7 @@ router.post('/login', async (req, res) => {
             },
         );
 
-        await insertUserSession(user.UserID, token, refreshToken);
+        //await insertUserSession(user.UserID, token, refreshToken);
 
         return res
             .cookie('access_token', token, {
@@ -135,7 +134,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/logout', async (req, res) => {
+router.delete('/', async (req, res) => {
     try {
         const token = req.cookies.access_token;
         console.log(token); // log the access_token cookie value
