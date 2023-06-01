@@ -12,7 +12,8 @@ const config = require('./config/auth.conf');
 const cors = require('cors');
 const corsOptions = {
     origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'DELETE']
+    methods: ['GET', 'POST', 'DELETE'],
+    credentials: true
 };
 
 /* ROUTE IMPORT */

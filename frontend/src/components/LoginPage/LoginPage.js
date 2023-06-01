@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 import { SESSION_URL } from '../utils/Constants';
-import { CookieSetter } from '../utils/CookieSetter';
+import { CookieSetter } from '../utils/CookieToggle';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -23,10 +23,16 @@ const LoginPage = () => {
     .then((response) => response.json())
     .then((data) => {
         //console.log(data);
-        const Cookie = () => {
+        const tokenCookie = () => {
             return <CookieSetter 
-                name="access-token"
+                name="access_token"
                 value={data.token}
+            />
+        }
+        const userCookie = () => {
+            return <CookieSetter 
+                name="user"
+                value={data.user}
             />
         }
         window.location.replace('/');

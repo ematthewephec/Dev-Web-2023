@@ -62,7 +62,7 @@ const deleteUserSession = async (token) => {
         [accessToken, refreshToken, token]
     );
 
-    return { accessToken, refreshToken };
+    //return { accessToken, refreshToken };
 }
 
 router.post('/', async (req, res) => {
@@ -87,9 +87,7 @@ router.post('/', async (req, res) => {
                 message: 'Incorrect email or password',
             });
         }
-        
         const userTokens = await fetchUserTokens(user.UserID);
-        
         const token = userTokens.accessToken || jwt.sign(
             user,
             config.secret,
@@ -98,7 +96,6 @@ router.post('/', async (req, res) => {
                 expiresIn: config.tokenLife,
             },
         );
-        
         const refreshToken = userTokens.refreshToken || jwt.sign(
             user,
             config.refreshTokenSecret,
@@ -107,9 +104,7 @@ router.post('/', async (req, res) => {
               expiresIn: config.refreshTokenLife,
             },
         );
-
         //await insertUserSession(user.UserID, token, refreshToken);
-
         return res
             .cookie('access_token', token, {
                 httpOnly: true,
@@ -120,6 +115,7 @@ router.post('/', async (req, res) => {
             .status(200)
             .json({
                 success: true,
+                user: user,
                 message: 'Authentication successful!',
                 token: token,
                 refreshToken: refreshToken,
@@ -136,11 +132,6 @@ router.post('/', async (req, res) => {
 
 router.delete('/', async (req, res) => {
     try {
-        const token = req.cookies.access_token;
-        console.log(token); // log the access_token cookie value
-        
-        await deleteUserSession(token);
-
         res.clearCookie('access_token', {path: '/'});
         res.status(200).json({message: 'Logout successful!'});
         return res.end();
@@ -149,7 +140,11 @@ router.delete('/', async (req, res) => {
     }
 });
 
-
+router.get('/protected', (req, res) => {
+    const accessToken = req.cookies.access_token;
+    // Do something with the access token
+    return accessToken;
+  });
 
 router.use(require('../helpers/tokenChecker'));
 
