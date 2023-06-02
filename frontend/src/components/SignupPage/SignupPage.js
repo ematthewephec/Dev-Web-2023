@@ -88,6 +88,9 @@ const SignupPage = () => {
                                         onChange={handleChange}
                                         required
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter a first name.
+                                    </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                                 <Col>
@@ -100,6 +103,9 @@ const SignupPage = () => {
                                         onChange={handleChange}
                                         required
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter a last name.
+                                    </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -113,6 +119,9 @@ const SignupPage = () => {
                                 onChange={handleChange}
                                 required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Please enter a valid email address.
+                            </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group controlId="password">
@@ -120,10 +129,15 @@ const SignupPage = () => {
                             <Form.Control
                                 type="password"
                                 name="password"
+                                placeholder="Password" 
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}"
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
                             />
+                            <Form.Control.Feedback type="invalid">
+                                Password must contain at least 8 characters, one big letter, one number, and one special character.
+                            </Form.Control.Feedback>
                             </Form.Group>
 
                         </Card.Body>
@@ -146,6 +160,9 @@ const SignupPage = () => {
                                         onChange={handleChange}
                                         required
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter your address.
+                                    </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                                 <Col>
@@ -158,6 +175,9 @@ const SignupPage = () => {
                                         onChange={handleChange}
                                         required
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter a house number.
+                                    </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -172,8 +192,12 @@ const SignupPage = () => {
                                     onChange={handleChange}
                                     required
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                        Please enter a postal code.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                                 </Col>
+                                
                                 <Col>
                                 <Form.Group controlId="country">
                                 <Form.Label>Pays:</Form.Label>
@@ -184,6 +208,9 @@ const SignupPage = () => {
                                     onChange={handleChange}
                                     required
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    Please enter a country name.
+                                </Form.Control.Feedback>
                                 </Form.Group>
                                 </Col>
                             </Row>
