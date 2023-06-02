@@ -17,10 +17,11 @@ function AdminNavbar(){
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
+                    <Navbar.Text>
+                        ADMINISTRATION PAGE
+                    </Navbar.Text>
                     <Nav className="me-auto">
                         <Nav.Link href="/">Return to Main Page</Nav.Link>
-                        <Nav.Link href='#'>Order List</Nav.Link>
-                        <Nav.Link href='#'>Users List</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
