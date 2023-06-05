@@ -14,4 +14,20 @@ router.get('/', async (req, res) => {
     res.status(400).send(error.message);
   }
 });
+
+router.patch('/:orderId', async(req, res) => {
+  try{
+    const orderId = req.params.orderId;
+    const orderQuery = 'UPDATE Orders SET WasCancelled=True WHERE WasCancelled=False AND OrderID=?';
+    const result = await pool.query(orderQuery, orderId);
+    result.affectedRows === 0 ?
+    (await pool.query('SELECT * FROM Orders WHERE WasCancelled=False AND OrderID=?', orderId)).length === 0 ?
+    res.status(404).send('Item already cancelled!') :
+    res.status(404).send('Item not found!') :
+    res.status(200).send('Order cancelled!');
+  }catch(err){
+    res.status(404).send('Not found!');
+  }
+});
+
 module.exports = router;

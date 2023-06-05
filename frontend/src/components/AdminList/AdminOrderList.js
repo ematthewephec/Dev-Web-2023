@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, ListGroup, Col, Row } from 'react-bootstrap';
+import AdminOrderDetails from './AdminOrderDetails';
 
 function AdminOrderList(props) {
     const orders = props.orders.map((order) => 
@@ -10,11 +11,16 @@ function AdminOrderList(props) {
                 <Col>{(order.OrderSubtotal).toFixed(2)}€</Col>
                 <Col>{order.OrderDate}</Col>
                 <Col>
-                    <Button 
-                        onClick={() => props.cancelOrder(order.OrderID)}
-                    >
-                        Delete Item
-                    </Button>
+                    <AdminOrderDetails order={order} />
+                </Col>
+                <Col>
+                    {order.WasCancelled === 0 ? 
+                        <Button 
+                            onClick={() => props.cancelOrder(order.OrderID)}
+                        >
+                            Cancel Order
+                        </Button>
+                    : <Button>Cancelled</Button>}
                 </Col>
             </Row>
         </ListGroup.Item>

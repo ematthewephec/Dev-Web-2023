@@ -39,6 +39,7 @@ CREATE TABLE Orders (
     DeliveryDate DATE,
     WasPaid BOOLEAN DEFAULT false,
     WasDelivered BOOLEAN DEFAULT false,
+    WasCancelled BOOLEAN DEFAULT false,
     NumItems INT NOT NULL DEFAULT 1,
     PRIMARY KEY (OrderID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),

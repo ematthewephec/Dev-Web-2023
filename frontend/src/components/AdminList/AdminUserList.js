@@ -9,11 +9,13 @@ function AdminUserList(props) {
                 <Col>{user.UserEmail}</Col>
                 <Col>{user.CreationDate}</Col>
                 <Col>
+                    {user.DeletionDate === null ?
                     <Button 
                         onClick={() => props.deleteUser(user.UserID)}
                     >
-                        Delete Item
+                        Delete User
                     </Button>
+                    : <Button>Deleted</Button>}
                 </Col>
             </Row>
         </ListGroup.Item>

@@ -26,6 +26,32 @@ function AdminPage() {
             return;
         })
     }
+
+    const deleteUser = async (userId) => {
+        fetch(`${USER_URL}/${userId}/delete`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((response) => response.json())
+        .then(() => {
+            getUsers();
+        })
+    };
+
+    const cancelOrder = async(orderId) => {
+        fetch(`${ORDER_URL}/${orderId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((response) => response.json())
+        .then(() => {
+            getOrders();
+        })
+    };
     
     useEffect(() => {
         getUsers();
@@ -40,14 +66,16 @@ function AdminPage() {
                 className="mb-3"
                 justify
             >
-                <Tab eventKey="users" title="Users">
+                <Tab eventKey="users" onClick={getUsers} title="Users">
                     <AdminUserList
                         users={users}
+                        deleteUser={deleteUser}
                     />
                 </Tab>
-                <Tab eventKey="orders" title="Orders">
+                <Tab eventKey="orders" onClick={getOrders} title="Orders">
                     <AdminOrderList
                         orders={orders}
+                        cancelOrder={cancelOrder}
                     />
                 </Tab>  
             </Tabs>
