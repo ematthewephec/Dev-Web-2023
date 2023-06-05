@@ -4,7 +4,7 @@ const pool = require('../helpers/database');
 
 router.get('/', async (req, res) => {
   try {
-    const productsQuery = 'SELECT ProductID, ProductName, ProductDesc, ProductPrice FROM Products;';
+    const productsQuery = 'SELECT * FROM Products;';
     const rows = await pool.query(productsQuery);
     res.status(200).json(rows);
   } catch (error) {

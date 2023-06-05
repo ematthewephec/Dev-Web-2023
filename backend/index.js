@@ -12,13 +12,14 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const corsOptions = {
     origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'DELETE']
+    methods: ['GET', 'POST', 'PATCH', 'DELETE']
 };
 
 /* ROUTE IMPORT */
 const products = require('./routes/product');
 const baskets = require('./routes/basket');
 const users = require('./routes/user');
+const orders = require('./routes/order');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
 app.use('/products', products);
 app.use('/baskets', baskets);
 app.use('/users', users);
+app.use('/orders', orders);
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
