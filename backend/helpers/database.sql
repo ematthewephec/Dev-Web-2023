@@ -1,77 +1,78 @@
 CREATE TABLE Users (
-    UserID int NOT NULL AUTO_INCREMENT,
-    UserName varchar(60),
-    UserEmail varchar(60),
-    UserPassword varchar(60),
-    CreationDate Date,
-    DeletionDate Date,
+    UserID INT NOT NULL AUTO_INCREMENT,
+    UserName VARCHAR(60),
+    UserEmail VARCHAR(60),
+    UserPassword VARCHAR(60),
+    CreationDate DATE,
+    DeletionDate DATE,
     PRIMARY KEY (UserID)
 );
 
 CREATE TABLE Products (
-    ProductID int NOT NULL AUTO_INCREMENT,
-    ProductName varchar(60),
-    ProductQuantity int,
-    ProductDesc text,
-    ProductPrice decimal(6,2),
-    ProductOnSale boolean,
+    ProductID INT NOT NULL AUTO_INCREMENT,
+    ProductName VARCHAR(60),
+    ProductStock INT,
+    ProductDesc TEXT,
+    ProductPrice DECIMAL(6,2),
+    ProductOnSale BOOLEAN,
     PRIMARY KEY (ProductID)
 );
 
 CREATE TABLE Addresses (
-    AddressID int NOT NULL AUTO_INCREMENT,
-    UserID int,
-    Street varchar(100),
-    Postcode int,
-    Country varchar(30),
+    AddressID INT NOT NULL AUTO_INCREMENT,
+    UserID INT,
+    Street VARCHAR(100),
+    Postcode INT,
+    Country VARCHAR(30),
     PRIMARY KEY (AddressID),
-    FOREIGN KEY (UserID) references Users(UserID)
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
 CREATE TABLE Orders (
-    OrderID int NOT NULL AUTO_INCREMENT,
-    UserID int,
-    ProductID int,
-	OrderSubtotal int,
-    OrderDate Date,
-	SubscriptionID int,
-    PaidDate Date,
-    DeliveryDate Date,
-    WasPaid boolean DEFAULT false,
-    WasDelivered boolean DEFAULT false,
+    OrderID INT NOT NULL AUTO_INCREMENT,
+    UserID INT,
+    ProductID INT,
+    OrderSubtotal INT,
+    OrderDate DATE,
+    SubscriptionID INT,
+    PaidDate DATE,
+    DeliveryDate DATE,
+    WasPaid BOOLEAN DEFAULT false,
+    WasDelivered BOOLEAN DEFAULT false,
+    NumItems INT NOT NULL DEFAULT 1,
     PRIMARY KEY (OrderID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
-	FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID)
+    FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID)
 );
 
 CREATE TABLE Baskets (
-	UserID int,
-	ItemIndex int NOT NULL AUTO_INCREMENT,
-    ItemQuantity int,
-	ProductID int,
-	PRIMARY KEY (ItemIndex),
+    UserID INT,
+    ItemIndex INT NOT NULL AUTO_INCREMENT,
+    ItemQuantity INT NOT NULL DEFAULT 1,
+    ProductID INT,
+    PRIMARY KEY (ItemIndex),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
 CREATE TABLE Subscriptions (
-    SubscriptionID int NOT NULL AUTO_INCREMENT,
-    UserID int,
-    ProductID int,
-    SubscriptionStart date,
-    SubscriptionEnd date,
-	SubscriptionLength int,
+    SubscriptionID INT NOT NULL AUTO_INCREMENT,
+    UserID INT,
+    ProductID INT,
+    SubscriptionStart DATE,
+    SubscriptionEnd DATE,
+    SubscriptionLength INT,
     PRIMARY KEY (SubscriptionID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
 CREATE TABLE AdminUsers (
-    AdminUserID int NOT NULL AUTO_INCREMENT,
-    AdminUserName varchar(60),
-    AdminUserEmail varchar(60),
-    AdminUserPassword varchar(60),
-    AdminAcces boolean,
+    AdminUserID INT NOT NULL AUTO_INCREMENT,
+    AdminUserName VARCHAR(60),
+    AdminUserEmail VARCHAR(60),
+    AdminUserPassword VARCHAR(60),
+    AdminAccess BOOLEAN,
     PRIMARY KEY (AdminUserID)
 );
