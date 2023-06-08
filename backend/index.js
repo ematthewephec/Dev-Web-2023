@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const corsOptions = {
     origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE']
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 };
 
 /* ROUTE IMPORT */

@@ -39,10 +39,6 @@ const SignupPage = () => {
     });
   };
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -50,7 +46,6 @@ const SignupPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Faites quelque chose avec les données d'inscription, par exemple envoyer une requête au serveur
-    console.log(formData);
     // Réinitialisez les champs du formulaire
     setFormData({
       firstName: '',
