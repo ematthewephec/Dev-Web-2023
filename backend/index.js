@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 
 dotenv.config({path: '.env'});
 const PORT = process.env.PORT || 3001;
-
+const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 //const session = require('express-session');
@@ -17,6 +17,7 @@ const corsOptions = {
 
 /* ROUTE IMPORT */
 const products = require('./routes/product');
+const facture = require('./routes/facture');
 const baskets = require('./routes/basket');
 const users = require('./routes/user');
 
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/products', products);
+app.use('/facture', facture);
 app.use('/baskets', baskets);
 app.use('/users', users);
 
