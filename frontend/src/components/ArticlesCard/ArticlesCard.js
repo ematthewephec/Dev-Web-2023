@@ -8,7 +8,7 @@ function ArticlesCard(props){
     function addBasket (){
         const productId = props.products.ProductID;
         const quantity = 1;
-        const userId = 1;
+        const userId = 11;
         fetch(BASKET_URL + `/add/${userId}/${productId}/${quantity}`, {
            method: 'POST',
         })

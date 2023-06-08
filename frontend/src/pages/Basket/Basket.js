@@ -3,13 +3,13 @@ import React, {useEffect, useState} from 'react';
 import {Container, Button} from 'react-bootstrap';
 import './Basket.css';
 import BasketList from '../../components/BasketList/BasketList';
-import { BASKET_URL } from '../../components/utils/Constants';
+import { BASKET_URL, FACTURE_URL } from '../../components/utils/Constants';
 
 function Basket() {
     const [basket, setBasket] = useState([]);
+    const userId = 11;
 
     const getBasket = async () => {
-        const userId = 1;
         fetch(`${BASKET_URL}/${userId}`)
         .then((response) => response.json())
         .then((data) => {
@@ -19,7 +19,6 @@ function Basket() {
     }
 
     const deleteItemFromBasket = (itemIndex) => {
-        const userId = 1;
         fetch(`${BASKET_URL}/${userId}`, {
             method: 'DELETE',
             body: itemIndex ? JSON.stringify({
@@ -36,13 +35,25 @@ function Basket() {
     }
 
     const clearBasket = () => {
-        const userId = 1;
         fetch(`${BASKET_URL}/${userId}/clear`, {
             method: 'DELETE',
         })
         .then((response) => response.json())
         .then(() => {
             getBasket();
+        })
+    }
+
+    const confirmBasket = () => {
+        fetch(`${FACTURE_URL}/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            
         })
     }
 
