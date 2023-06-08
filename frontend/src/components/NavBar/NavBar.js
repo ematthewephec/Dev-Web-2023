@@ -38,10 +38,6 @@ function Navigation(){
             window.location.replace('/');
         });
     }
-
-    const checkCookie = async () => {
-        console.log();
-    }
     
     return(
         <Navbar className='navbar'>
@@ -60,7 +56,7 @@ function Navigation(){
                         <Nav.Link href="/">Home</Nav.Link>
                         <Nav.Link href='/articles'>Articles</Nav.Link>
                         {cookie ? (
-                            <Nav.Link href="#" onClick={checkCookie}>Logout</Nav.Link>
+                            <Nav.Link href="#" onClick={clearCookie}>Logout</Nav.Link>
                         ) : (
                             <Nav.Link href='/login'>Login/Register</Nav.Link>
                         )}

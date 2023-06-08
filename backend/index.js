@@ -27,11 +27,16 @@ const app = express();
 /* MIDDLEWARE */
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(session(config));
-app.use(cookieParser(null, {
-    sameSite: 'strict'
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
 }));
+app.use(bodyParser.urlencoded({extended: true}));
+//app.use(cookieParser(null, {
+    //sameSite: 'strict'
+//}));
 
 
 /* API */

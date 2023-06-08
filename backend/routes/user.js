@@ -67,11 +67,4 @@ router.patch('/:id/delete', async (req, res) => {
     }
 });
 
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
-    const emailRows = await pool.query(checkEmailQuery, email);
-
-});
-
 module.exports = router;

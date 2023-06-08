@@ -67,6 +67,8 @@ const deleteUserSession = async (token) => {
 
 router.post('/', async (req, res) => {
     try {
+        if(req.session.email != null) return res.status(200).send("Already logged in.")
+
         const { email, password } = req.body;
         const checkEmailQuery = 'SELECT * FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
         const emailRows = await pool.query(checkEmailQuery, email);
@@ -87,40 +89,15 @@ router.post('/', async (req, res) => {
                 message: 'Incorrect email or password',
             });
         }
-        const userTokens = await fetchUserTokens(user.UserID);
-        const token = userTokens.accessToken || jwt.sign(
-            user,
-            config.secret,
-            {
-                algorithm: 'HS256',
-                expiresIn: config.tokenLife,
-            },
-        );
-        const refreshToken = userTokens.refreshToken || jwt.sign(
-            user,
-            config.refreshTokenSecret,
-            {
-              algorithm: 'HS256',
-              expiresIn: config.refreshTokenLife,
-            },
-        );
-        //await insertUserSession(user.UserID, token, refreshToken);
-        return res
-            .cookie('access_token', token, {
-                httpOnly: true,
-                secure: true,
-                expires: config.cookieLife,
-                sameSite: 'strict',
-            })
-            .status(200)
-            .json({
-                success: true,
-                user: user,
-                message: 'Authentication successful!',
-                token: token,
-                refreshToken: refreshToken,
-        });
+        
+        req.session.email = user.UserEmail;
+        req.session.userId = user.UserID;
+        req.session.name = user.UserName;
 
+        return res.status(200).json({
+            success: true,
+            message: 'Logged in successfully',
+        });
     } catch (err) {
         console.log(err);
         return res.status(500).json({
@@ -132,11 +109,15 @@ router.post('/', async (req, res) => {
 
 router.delete('/', async (req, res) => {
     try {
-        res.clearCookie('access_token', {path: '/'});
-        res.status(200).json({message: 'Logout successful!'});
-        return res.end();
+        req.session.destroy((err) => {
+            if (err) {
+                return console.log(err);
+            }
+            res.status(200).json({message: 'Logout successful!'});
+            return res.end();
+        });
     } catch (error) {
-        res.status(400).json({message: 'Cookie isn\'t cleared'});
+        res.status(400).json({message: 'Session isn\'t cleared'});
     }
 });
 
