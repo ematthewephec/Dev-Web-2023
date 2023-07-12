@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 import './AdminPage.css';
-import { USER_URL, ORDER_URL } from '../../components/utils/Constants';
+import { USER_URL, ORDER_URL, PRODUCT_URL } from '../../components/utils/Constants';
 import AdminUserList from '../../components/AdminList/AdminUserList';
 import AdminOrderList from '../../components/AdminList/AdminOrderList';
+import AdminProductList from '../../components/AdminList/AdminProductList';
 
 function AdminPage() {
     const [users, setUsers] = useState([]);
     const [orders, setOrders] = useState([]);
+    const [products, setProducts] = useState([]);
 
     const getUsers = async () => {
         fetch(`${USER_URL}`)
@@ -23,6 +25,15 @@ function AdminPage() {
         .then((response) => response.json())
         .then((data) => {
             setOrders(data);
+            return;
+        })
+    }
+
+    const getProducts = async () => {
+        fetch(`${PRODUCT_URL}`)
+        .then((response) => response.json())
+        .then((data) => {
+            setProducts(data);
             return;
         })
     }
@@ -52,10 +63,13 @@ function AdminPage() {
             getOrders();
         })
     };
+
+    //const addProduct = async (product) => {};
     
     useEffect(() => {
         getUsers();
         getOrders();
+        getProducts();
     }, []);
 
     return(
@@ -78,6 +92,12 @@ function AdminPage() {
                         cancelOrder={cancelOrder}
                     />
                 </Tab>  
+                <Tab eventKey="products" onClick={getUsers} title="Products">
+                    <AdminProductList
+                        products={products}
+                        //addProduct={addProduct}
+                    />
+                </Tab>
             </Tabs>
         </>
     )

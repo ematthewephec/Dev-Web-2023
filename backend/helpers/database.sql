@@ -8,6 +8,15 @@ CREATE TABLE Users (
     PRIMARY KEY (UserID)
 );
 
+CREATE TABLE Images (
+    ImageID INT NOT NULL AUTO_INCREMENT,
+    ImageName VARCHAR(100),
+    ImageSize INT,
+    ImageType VARCHAR(20),
+    ImageData LONGBLOB,
+    PRIMARY KEY (ImageID)
+);
+
 CREATE TABLE Products (
     ProductID INT NOT NULL AUTO_INCREMENT,
     ProductName VARCHAR(60),
@@ -15,7 +24,9 @@ CREATE TABLE Products (
     ProductDesc TEXT,
     ProductPrice DECIMAL(6,2),
     ProductOnSale BOOLEAN,
-    PRIMARY KEY (ProductID)
+    ProductImageID INT,
+    PRIMARY KEY (ProductID),
+    FOREIGN KEY (ProductImageID) REFERENCES Images(ImageID) 
 );
 
 CREATE TABLE Addresses (
@@ -26,25 +37,6 @@ CREATE TABLE Addresses (
     Country VARCHAR(30),
     PRIMARY KEY (AddressID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
-);
-
-CREATE TABLE Orders (
-    OrderID INT NOT NULL AUTO_INCREMENT,
-    UserID INT,
-    ProductID INT,
-    OrderSubtotal INT,
-    OrderDate DATE,
-    SubscriptionID INT,
-    PaidDate DATE,
-    DeliveryDate DATE,
-    WasPaid BOOLEAN DEFAULT false,
-    WasDelivered BOOLEAN DEFAULT false,
-    WasCancelled BOOLEAN DEFAULT false,
-    NumItems INT NOT NULL DEFAULT 1,
-    PRIMARY KEY (OrderID),
-    FOREIGN KEY (UserID) REFERENCES Users(UserID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
-    FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID)
 );
 
 CREATE TABLE Baskets (
@@ -76,4 +68,23 @@ CREATE TABLE AdminUsers (
     AdminUserPassword VARCHAR(60),
     AdminAccess BOOLEAN,
     PRIMARY KEY (AdminUserID)
+);
+
+CREATE TABLE Orders (
+    OrderID INT NOT NULL AUTO_INCREMENT,
+    UserID INT,
+    ProductID INT,
+    OrderSubtotal INT,
+    OrderDate DATE,
+    SubscriptionID INT,
+    PaidDate DATE,
+    DeliveryDate DATE,
+    WasPaid BOOLEAN DEFAULT false,
+    WasDelivered BOOLEAN DEFAULT false,
+    WasCancelled BOOLEAN DEFAULT false,
+    NumItems INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (OrderID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID)
 );
