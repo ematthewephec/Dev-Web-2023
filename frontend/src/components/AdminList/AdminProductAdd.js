@@ -1,58 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Button, Card, Row, Col } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Form, Row, Col, Card } from 'react-bootstrap';
 import { PRODUCT_URL } from '../utils/Constants';
 
 const AddProduct = () => {
-    const [formData, setFormData] = useState({
-        productName: '',
-        productStock: '',
-        productDesc: '',
-        productPrice: '',
-        productOnSale: '',
-    });
+  const [formData, setFormData] = useState({
+    productName: '',
+    productStock: '',
+    productDesc: '',
+    productPrice: '',
+    productOnSale: '1',
+  });
 
-    const NewProduct = (formData) => {
-        fetch(`${PRODUCT_URL}`, {
-            method: 'POST',
-            body: formData ? JSON.stringify({
-                productName: `${formData.productName}`,
-                productStock: formData.productStock,
-                productDesc: formData.productDesc,
-                productPrice: formData.productPrice,
-                productOnSale: formData.productOnSale
-            }) : null,
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })  
-        .then((response) => response.json())
-        .then(() => {
-            window.location.replace('/admin');
-        });
-    };
+  const [selectedImage, setSelectedImage] = useState(null);
 
-    useEffect(() => {
-        console.log(formData);
-    }, [formData]);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+  const handleImageChange = (e) => {
+    setSelectedImage(e.target.files[0]);
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(selectedImage);
+    console.log(formData);
 
-        console.log(formData);
+    const formDataWithImage = new FormData();
+    formDataWithImage.append('productName', formData.productName);
+    formDataWithImage.append('productStock', formData.productStock);
+    formDataWithImage.append('productDesc', formData.productDesc);
+    formDataWithImage.append('productPrice', formData.productPrice);
+    formDataWithImage.append('productOnSale', formData.productOnSale);
+    formDataWithImage.append('image', selectedImage);
 
-        setFormData({
-            productName: '',
-            productStock: '',
-            productDesc: '',
-            productPrice: '',
-            productOnSale: '',
-        });
-        NewProduct(formData);
-    };
+    try {
+      const response = await fetch(PRODUCT_URL, {
+        method: 'POST',
+        body: formDataWithImage,
+      });
+
+      if (response.ok) {
+        window.location.replace('/admin');
+      } else {
+        console.error('Error:', response.status);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <>
@@ -122,6 +118,15 @@ const AddProduct = () => {
                         <option value="1">Oui</option>
                         <option value="2">Non</option>
                       </Form.Select>
+                    </Form.Group>
+                    <Form.Group controlId="productImage">
+                      <Form.Label>Image du produit</Form.Label>
+                      <Form.Control
+                        type="file"
+                        name="image"
+                        onChange={handleImageChange}
+                        accept=".jpg, .jpeg, .png"
+                      />
                     </Form.Group>
                   </Col>
                 </Row>
