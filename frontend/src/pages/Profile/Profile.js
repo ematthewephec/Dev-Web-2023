@@ -1,4 +1,4 @@
-import './profile.css';
+import './Profile.css';
 import React, { useState } from 'react';
 import { Container, Form, Button, Col, Row } from 'react-bootstrap';
 

@@ -26,6 +26,7 @@
     "axios-hooks": "^4.0.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
+    "bootstrap": "^5.3.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "create-react-app": "^5.0.1",
@@ -39,8 +40,12 @@
     "nodemon": "^2.0.21",
     "package.json": "^0.0.0",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.8.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0",
     "react-scripts": "^5.0.1",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "web-vitals": "^3.4.0"
   },
   "babel": {
     "presets": [
