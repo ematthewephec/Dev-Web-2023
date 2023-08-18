@@ -7,6 +7,7 @@ import BasicNavbar from '../../components/utils/BasicNavbar';
 
 import Articles from '../Articles/Articles';
 import Basket from '../Basket/Basket';
+import Profile from '../Profile/Profile';
 import Connections from '../Connections/Connections';
 import Footer from '../../components/Footer/Footer';
 
@@ -19,9 +20,10 @@ function App() {
         <Routes>
           <Route path="/" element={<IndexPage/>} />
           <Route path='/articles' element={<Articles/>}/>
-          <Route path='/connect' element={<Connections/>}/>
+          {/*<Route path='/connect' element={<Connections/>}/>*/}
           <Route path='/basket' element={<Basket/>}/>
-        </Routes> 
+          <Route path='/profile' element={<Profile/>}/>
+        </Routes>
         <Footer/>
       </Router>
     </div>
