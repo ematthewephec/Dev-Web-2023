@@ -6,6 +6,13 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const getCurrentDate = require('../helpers/utils');
 const jwt = require('jsonwebtoken');
+const cors = require('cors'); // Importez le module cors
+
+const app = express();
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+})); // Utilisez le middleware cors
 
 router.get('/', async (req, res) => {
     res.status(200).send("This is the user route of the API!");
@@ -91,7 +98,8 @@ router.post('/login', async (req, res) => {
 
 });
 
-router.patch('/update/:id', async (req, res) => {
+router.post('/update/:id', async (req, res) => {
+    console.log('request');
     try {
         const userId = req.params.id;
         const updateData = req.body; // Supposons que les données à mettre à jour sont envoyées dans le corps de la requête
@@ -104,11 +112,15 @@ router.patch('/update/:id', async (req, res) => {
             return;
         }
 
-        const updateUserQuery = 'UPDATE Users SET FirstName=?, LastName=?, Email=? WHERE UserID=?';
-        const result = await pool.query(updateUserQuery, [updateData.firstName, updateData.lastName, updateData.email, userId]);
+        console.log(updateData)
+
+        const updateUserQuery = 'UPDATE Users SET UserName=?, UserFirstname=?, UserEmail=? WHERE UserID=?';
+        console.log(updateData.userName)
+        const result = await pool.query(updateUserQuery, [updateData.userName, updateData.firstName, updateData.email, userId]);
 
         res.status(200).json({ message: 'Informations utilisateur mises à jour avec succès.' });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Une erreur s\'est produite lors de la mise à jour des informations.' });
     }
 });

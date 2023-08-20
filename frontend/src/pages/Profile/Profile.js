@@ -7,7 +7,7 @@ function Profile() {
     const [userData, setUserData] = useState({
         id:0,
         firstName: '',
-        lastName: '',
+        userName: '',
         email: '',
         street: '',
         city: '',
@@ -23,7 +23,8 @@ function Profile() {
                 setUserData(prevData => ({
                     ...prevData,
                     id: data.user.UserID,
-                    firstName: data.user.UserName,
+                    firstName: data.user.UserFirstname,
+                    userName: data.user.UserName,
                     email: data.user.UserEmail,
 
                 }));
@@ -36,10 +37,33 @@ function Profile() {
 
                     }));
                 }
-                console.log(data.addresses);
                 return;
             })
     }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await fetch(`${USER_URL}/update/${userData.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            if (response.ok) {
+                // Mise à jour réussie, effectuez des actions nécessaires
+                console.log('Mise à jour réussie');
+            } else {
+                // Gérer les erreurs ici
+                console.error('Erreur lors de la mise à jour');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la requête', error);
+        }
+    };
 
     useEffect(() => {
         getInfoProfile();
@@ -58,7 +82,7 @@ function Profile() {
                 <h2>Profile</h2>
             </Container>
             <Container className='profile-details  text-center'>
-                <Form action={`/update/${userData.id}`} method="POST">
+                <Form  onSubmit={handleSubmit}>
                     <Form.Group as={Row} controlId='formFirstName'  className='mt-2'>
                         <Form.Label column sm={2}>Prénom:</Form.Label>
                         <Col sm={5}>
@@ -72,18 +96,19 @@ function Profile() {
                         </Col>
                     </Form.Group>
 
-                    {/*<Form.Group as={Row} controlId='formLastName'  className='mt-2'>*/}
-                    {/*    <Form.Label column sm={2}>Nom:</Form.Label>*/}
-                    {/*    <Col sm={5}>*/}
-                    {/*        <Form.Control*/}
-                    {/*            type='text'*/}
-                    {/*            value={userData.lastName}*/}
-                    {/*            onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}*/}
-                    {/*            readOnly={!profileModify}*/}
-                    {/*            // Vous pouvez ajouter une fonction de mise à jour ici*/}
-                    {/*        />*/}
-                    {/*    </Col>*/}
-                    {/*</Form.Group>*/}
+                    <Form.Group as={Row} controlId='formLastName'  className='mt-2'>
+                        <Form.Label column sm={2}>Nom:</Form.Label>
+                        <Col sm={5}>
+                            <Form.Control
+                                type='text'
+                                value={userData.userName}
+                                onChange={(e) => setUserData({ ...userData, userName: e.target.value })}
+                                readOnly={!profileModify}
+
+                                // Vous pouvez ajouter une fonction de mise à jour ici
+                            />
+                        </Col>
+                    </Form.Group>
 
                     <Form.Group as={Row} controlId='formEmail'  className='mt-2'>
                         <Form.Label column sm={2}>Email:</Form.Label>
