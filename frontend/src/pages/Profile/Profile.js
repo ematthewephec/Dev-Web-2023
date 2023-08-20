@@ -2,8 +2,12 @@ import './Profile.css';
 import React,  {useEffect, useState} from 'react';
 import { Container, Form, Button, Col, Row } from 'react-bootstrap';
 import {USER_URL} from "../../components/utils/Constants";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Profile() {
+    const notify = () => toast("Wow so easy!");
+
     const [userData, setUserData] = useState({
         id:0,
         firstName: '',
@@ -54,11 +58,29 @@ function Profile() {
             });
 
             if (response.ok) {
-                // Mise à jour réussie, effectuez des actions nécessaires
-                console.log('Mise à jour réussie');
+                setProfileModify(false)
+                toast.success(' Mise à jour réussie', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
             } else {
-                // Gérer les erreurs ici
-                console.error('Erreur lors de la mise à jour');
+                setProfileModify(false)
+                toast.error('Erreur lors de la mise à jour', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
             }
         } catch (error) {
             console.error('Erreur lors de la requête', error);
@@ -175,6 +197,7 @@ function Profile() {
                     </Button>
                 )}
             </Container>
+            <ToastContainer />
         </div>
     );
 }
