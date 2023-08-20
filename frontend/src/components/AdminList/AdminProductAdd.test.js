@@ -1,37 +1,39 @@
-/*import React from 'react';
-import { render, fireEvent, getByAltText } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect'; // Pour les matchers supplémentaires comme "toBeInTheDocument"
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import AddProduct from './AdminProductAdd';
 
-test('devrait afficher le composant AddProduct', () => {
-  const { getByLabelText, getByText } = render(<AddProduct />);
+describe('AddProduct component', () => {
+  it('renders form elements correctly', () => {
+    render(<AddProduct />);
+    
+    expect(screen.getByLabelText('Nom du produit')).toBeInTheDocument();
+    expect(screen.getByLabelText('Stock du produit')).toBeInTheDocument();
+    expect(screen.getByLabelText('Description du produit')).toBeInTheDocument();
+    expect(screen.getByLabelText('Prix du produit')).toBeInTheDocument();
+    expect(screen.getByLabelText('En vente ?')).toBeInTheDocument();
+    expect(screen.getByLabelText('Image du produit')).toBeInTheDocument();
+    expect(screen.getByText('Ajouter le produit')).toBeInTheDocument();
+  });
 
-  // Vérifier que les éléments du formulaire sont affichés
-  const productNameInput = getByLabelText('Nom du produit');
-  expect(productNameInput).toBeInTheDocument();
+  it('updates form data on input change', () => {
+    render(<AddProduct />);
+    
+    const productNameInput = screen.getByLabelText('Nom du produit');
+    fireEvent.change(productNameInput, { target: { value: 'Test Product' } });
+    
+    expect(productNameInput.value).toBe('Test Product');
+  });
 
-  const productStockInput = getByLabelText('Stock du produit');
-  expect(productStockInput).toBeInTheDocument();
+  // Add more test cases for other form fields and interactions as needed
 
-  // ... autres éléments du formulaire ...
-
-  // Vérifier que les valeurs initiales du formulaire sont vides ou définies par défaut
-  //expect(getByLabelText('Nom du produit')).toHaveValue('test');
-  //expect(getByLabelText('Stock du produit')).toHaveValue('1');
-  // ... autres champs du formulaire ...
-
-  // Vérifier que la soumission du formulaire fonctionne
-  fireEvent.change(productNameInput, { target: { value: 'Produit de test' } });
-  fireEvent.change(productStockInput, { target: { value: '10' } });
-  // ... définir les valeurs des autres champs du formulaire ...
-  
-  // Cliquer sur le bouton "Ajouter le produit"
-  const submitButton = getByText('Ajouter le produit');
-  fireEvent.click(submitButton);
-
-  // (Vous pouvez ajouter des assertions supplémentaires ici pour vérifier si les données du formulaire sont correctement envoyées)
-
-  // Vous pouvez également tester l'image par défaut
-  const defaultImage = getByAltText('No Images');
-  expect(defaultImage).toBeInTheDocument();
-});*/
+  it('submits the form correctly', () => {
+    render(<AddProduct />);
+    
+    // Mock fetch and response here
+    
+    const addButton = screen.getByText('Ajouter le produit');
+    fireEvent.click(addButton);
+    
+    // Add assertions for expected fetch calls and redirects
+  });
+});

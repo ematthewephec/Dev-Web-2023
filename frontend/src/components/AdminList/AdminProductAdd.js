@@ -23,8 +23,8 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(selectedImage);
-    console.log(formData);
+    //console.log(selectedImage);
+    //console.log(formData);
 
     const formDataWithImage = new FormData();
     formDataWithImage.append('productName', formData.productName);
