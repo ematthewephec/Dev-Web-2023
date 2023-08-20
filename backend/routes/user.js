@@ -99,10 +99,18 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/update/:id', async (req, res) => {
-    console.log('request');
     try {
         const userId = req.params.id;
         const updateData = req.body; // Supposons que les données à mettre à jour sont envoyées dans le corps de la requête
+
+        // Vérifier si l'e-mail existe déjà
+        const checkEmailQuery = 'SELECT * FROM Users WHERE UserEmail=? AND UserID <> ?';
+        const emailRows = await pool.query(checkEmailQuery, [updateData.email, userId]);
+
+        if (emailRows.length > 0) {
+            res.status(400).json({ message: 'Cette adresse e-mail est déjà utilisée par un autre utilisateur.' });
+            return;
+        }
 
         const checkUserQuery = 'SELECT * FROM Users WHERE UserID=?';
         const userRows = await pool.query(checkUserQuery, userId);
@@ -112,10 +120,7 @@ router.post('/update/:id', async (req, res) => {
             return;
         }
 
-        console.log(updateData)
-
         const updateUserQuery = 'UPDATE Users SET UserName=?, UserFirstname=?, UserEmail=? WHERE UserID=?';
-        console.log(updateData.userName)
         const result = await pool.query(updateUserQuery, [updateData.userName, updateData.firstName, updateData.email, userId]);
 
         res.status(200).json({ message: 'Informations utilisateur mises à jour avec succès.' });
