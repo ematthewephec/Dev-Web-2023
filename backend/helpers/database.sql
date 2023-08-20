@@ -23,6 +23,7 @@ CREATE TABLE Addresses (
     UserID INT,
     Street VARCHAR(100),
     Postcode INT,
+     VARCHAR(30),
     Country VARCHAR(30),
     PRIMARY KEY (AddressID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)

@@ -1,19 +1,51 @@
 import './Profile.css';
-import React, { useState } from 'react';
+import React,  {useEffect, useState} from 'react';
 import { Container, Form, Button, Col, Row } from 'react-bootstrap';
+import {USER_URL} from "../../components/utils/Constants";
 
 function Profile() {
-    const [profileModify, setProfileModify] = useState(false);
     const [userData, setUserData] = useState({
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'johndoe@example.com',
-        street: 'street',
-        city: 'lln',
-        zip: '1348',
+        id:0,
+        firstName: '',
+        lastName: '',
+        email: '',
+        street: '',
+        city: '',
+        zip: '',
         // Ajoutez d'autres champs ici
     });
 
+    const getInfoProfile = async () => {
+        const userId = 1;
+        fetch(`${USER_URL}/${userId}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setUserData(prevData => ({
+                    ...prevData,
+                    id: data.user.UserID,
+                    firstName: data.user.UserName,
+                    email: data.user.UserEmail,
+
+                }));
+                if(data.addresses.length !== 0 ){
+                    setUserData(prevData => ({
+                        ...prevData,
+                        city: data.addresses[0].City,
+                        street: data.addresses[0].Street,
+                        zip: data.addresses[0].Postcode,
+
+                    }));
+                }
+                console.log(data.addresses);
+                return;
+            })
+    }
+
+    useEffect(() => {
+        getInfoProfile();
+    }, []);
+
+    const [profileModify, setProfileModify] = useState(false);
     const handleFormSubmit = (event) => {
         event.preventDefault();
         // Ajoutez ici la logique pour enregistrer les modifications
@@ -26,7 +58,7 @@ function Profile() {
                 <h2>Profile</h2>
             </Container>
             <Container className='profile-details  text-center'>
-                <Form>
+                <Form action={`/update/${userData.id}`} method="POST">
                     <Form.Group as={Row} controlId='formFirstName'  className='mt-2'>
                         <Form.Label column sm={2}>Prénom:</Form.Label>
                         <Col sm={5}>
@@ -40,18 +72,18 @@ function Profile() {
                         </Col>
                     </Form.Group>
 
-                    <Form.Group as={Row} controlId='formLastName'  className='mt-2'>
-                        <Form.Label column sm={2}>Nom:</Form.Label>
-                        <Col sm={5}>
-                            <Form.Control
-                                type='text'
-                                value={userData.lastName}
-                                onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
-                                readOnly={!profileModify}
-                                // Vous pouvez ajouter une fonction de mise à jour ici
-                            />
-                        </Col>
-                    </Form.Group>
+                    {/*<Form.Group as={Row} controlId='formLastName'  className='mt-2'>*/}
+                    {/*    <Form.Label column sm={2}>Nom:</Form.Label>*/}
+                    {/*    <Col sm={5}>*/}
+                    {/*        <Form.Control*/}
+                    {/*            type='text'*/}
+                    {/*            value={userData.lastName}*/}
+                    {/*            onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}*/}
+                    {/*            readOnly={!profileModify}*/}
+                    {/*            // Vous pouvez ajouter une fonction de mise à jour ici*/}
+                    {/*        />*/}
+                    {/*    </Col>*/}
+                    {/*</Form.Group>*/}
 
                     <Form.Group as={Row} controlId='formEmail'  className='mt-2'>
                         <Form.Label column sm={2}>Email:</Form.Label>

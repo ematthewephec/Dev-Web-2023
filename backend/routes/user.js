@@ -14,10 +14,27 @@ router.get('/', async (req, res) => {
 router.get('/:id', async(req, res) => {
     try {
         const userQuery = 'SELECT * FROM Users WHERE DeletionDate IS NULL AND UserID=?';
-        const rows = await pool.query(userQuery, req.params.id);
-        res.status(200).json(rows);
+        const addressQuery = 'SELECT * FROM Addresses WHERE UserID=?';
+
+        const userRows = await pool.query(userQuery, req.params.id);
+        const addressRows = await pool.query(addressQuery, req.params.id);
+
+        const user = userRows[0];
+        const addresses = addressRows;
+
+        if (!user) {
+            res.status(404).json({ error: 'Utilisateur non trouvé' });
+            return;
+        }
+
+        const userDataWithAddresses = {
+            user,
+            addresses
+        };
+
+        res.status(200).json(userDataWithAddresses);
     } catch (error) {
-        res.status(404).send(error.message);
+        res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération des données' });
     }
 });
 
@@ -27,7 +44,7 @@ router.post('/', async (req, res) => {
       const {username, email, password} = credentials
       const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
       const emailRows = await pool.query(checkEmailQuery, email);
-  
+
       if (emailRows.length > 0) {
         res.status(409).json({message: 'Email already registered'});
       } else {
@@ -40,7 +57,7 @@ router.post('/', async (req, res) => {
         const {street, postalCode, country} = addressInfo;
         const addressQuery = 'INSERT INTO Addresses(UserID, Street, Postcode, Country) VALUES (?,?,?,?)';
         const addressResult = await pool.query(addressQuery, [userId, street, postalCode, country]);
-        
+
         res.status(200).json({message: `User ${userId} registered!`});
       }
     } catch (error) {
@@ -72,6 +89,28 @@ router.post('/login', async (req, res) => {
     const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
     const emailRows = await pool.query(checkEmailQuery, email);
 
+});
+
+router.patch('/update/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const updateData = req.body; // Supposons que les données à mettre à jour sont envoyées dans le corps de la requête
+
+        const checkUserQuery = 'SELECT * FROM Users WHERE UserID=?';
+        const userRows = await pool.query(checkUserQuery, userId);
+
+        if (userRows.length === 0) {
+            res.status(404).json({ message: 'Utilisateur non trouvé.' });
+            return;
+        }
+
+        const updateUserQuery = 'UPDATE Users SET FirstName=?, LastName=?, Email=? WHERE UserID=?';
+        const result = await pool.query(updateUserQuery, [updateData.firstName, updateData.lastName, updateData.email, userId]);
+
+        res.status(200).json({ message: 'Informations utilisateur mises à jour avec succès.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Une erreur s\'est produite lors de la mise à jour des informations.' });
+    }
 });
 
 module.exports = router;
