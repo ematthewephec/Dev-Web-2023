@@ -79,7 +79,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const checkEmailQuery = 'SELECT UserID, UserEmail, UserPassword FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
+        const checkEmailQuery = 'SELECT UserID, UserEmail, UserPassword, UserName, UserFirstname FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
         const emailRows = await pool.query(checkEmailQuery, [email]);
 
         if (emailRows.length === 0) {
@@ -100,7 +100,7 @@ router.post('/login', async (req, res) => {
 
         const token = jwt.sign(payload, secretKey, options);
 
-        return res.status(200).json({ token });
+        return res.status(200).json({ token, userId: user.UserID, firstName: user.UserFirstname, lastName: user.UserName });
 
     } catch (error) {
         console.error(error);

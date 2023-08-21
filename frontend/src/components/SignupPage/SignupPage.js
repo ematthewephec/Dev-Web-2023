@@ -10,13 +10,18 @@ import Cookies from 'js-cookie'; // Importez js-cookie
 const SignupPage = () => {
 
     const { user, login } = useAuth();
-    console.log("User data from context:", user);
-    const authToken = Cookies.get('authToken');
-    console.log('cookier',authToken );
+    const userDataString = Cookies.get('userData');
+    let userData = null; // Initialisez userData avec null par défaut
+
+    if (userDataString) {
+        // Convertissez la chaîne JSON en objet si userDataString n'est pas undefined
+        userData = JSON.parse(userDataString);
+    }
 
     const handleLogout = () => {
         // Supprimez le cookie et réinitialisez l'utilisateur
-        Cookies.remove('authToken');
+        userData = null;
+        Cookies.remove('userData');
         toast.success('Vous êtes Déconnecter', {
             position: "top-right",
             autoClose: 1500,
@@ -27,10 +32,9 @@ const SignupPage = () => {
             progress: undefined,
             theme: "colored",
         });
+        window.location.reload();
     };
 
-
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [showRegistrationForm, setShowRegistrationForm] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -52,7 +56,6 @@ const SignupPage = () => {
             .then((data) => {
                 if (data.token) {
                     // Si le jeton d'authentification est renvoyé dans la réponse
-                    // Mettre à jour l'état isAuthenticated
                     toast.success('Vous êtes connecter', {
                         position: "top-right",
                         autoClose: 1500,
@@ -63,9 +66,16 @@ const SignupPage = () => {
                         progress: undefined,
                         theme: "colored",
                     });
-                    setIsAuthenticated(true);
                     login(data.token);
-                    Cookies.set('authToken', data.token, { secure: true, sameSite: 'strict', expires: 7 }); // Exemple : expiration dans 7 jours
+                    const userData = {
+                        idUser:data.UserId,
+                        token: data.token,
+                        lastName: data.lastName,
+                        firstName: data.firstName
+                    };
+
+                    // Enregistrez l'objet JSON dans un cookie sécurisé
+                    Cookies.set('userData', JSON.stringify(userData), { secure: true, sameSite: 'strict', expires: 7 }); // Exemple : expiration dans 7 jours
                 } else {
                     toast.error('Vos identifiants semblent incorrects', {
                         position: "top-right",
@@ -77,8 +87,6 @@ const SignupPage = () => {
                         progress: undefined,
                         theme: "colored",
                     });
-                    setIsAuthenticated(false);
-
                 }
             })
             .catch((error) => {
@@ -141,7 +149,6 @@ const SignupPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Faites quelque chose avec les données d'inscription, par exemple envoyer une requête au serveur
-        console.log(formData);
         // Réinitialisez les champs du formulaire
         setFormData({
             firstName: '',
@@ -158,15 +165,13 @@ const SignupPage = () => {
 
     return (
         <>
-            {authToken ?
+            {userData?
                 <div className="mt-4">
-                    <h3>Vous etes connecter ;) </h3>
+                    <h3>Vous êtes connectez en tant que {userData.firstName} {userData.lastName} </h3>
                     <Button onClick={handleLogout} className="mt-4"> Déconnexion </Button>
                 </div>
 
                 :
-                isAuthenticated ?
-                        <h3>Vous etes connecter ;) </h3> :
                         <div>
                             <h2 className="mt-4">{showRegistrationForm ? 'Inscription d\'utilisateur' : 'Déjà inscrit ?'}</h2>
                             {!showRegistrationForm ? (
@@ -342,7 +347,6 @@ const SignupPage = () => {
                                 </div>
                             )}
                         </div>
-
             }
 
             <ToastContainer/>
