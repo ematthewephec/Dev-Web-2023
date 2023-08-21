@@ -61,11 +61,13 @@ function BasketList(props) {
                     </>
                 }
             </Container>
-            <div className="mt-2">
-                <Button onClick={() => setShowModal(!showModal)}>
-                    Valider ma commande
-                </Button>
-            </div>
+            {props.basket.length >= 1 ?
+                <div className="mt-2">
+                    <Button onClick={() => setShowModal(!showModal)}>
+                        Valider ma commande
+                    </Button>
+                </div>
+                : null}
             <Modal show={showModal} onHide={handleModalClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Récapitulatif de la commande</Modal.Title>
