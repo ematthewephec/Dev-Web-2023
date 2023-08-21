@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 
 dotenv.config({path: '.env'});
 const PORT = process.env.PORT || 3001;
-const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 //const session = require('express-session');
