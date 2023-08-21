@@ -2,7 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 import { USER_URL } from '../utils/Constants';
 
-const SignupPage = () => {
+const SignupPage = ({ setIsAuthenticated }) => {
+    const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+        const [username, setUsername] = useState('');
+        const [password, setPassword] = useState('');
+
+        const handleLogin = () => {
+            // Effectuer la logique d'authentification ici (appel à l'API, vérification des informations, etc.)
+            // Si l'authentification réussit, définissez isAuthenticated sur true
+            setIsAuthenticated(true);
+        };
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -67,7 +77,48 @@ const SignupPage = () => {
 
   return (
     <>
-        <h1>Inscription d'user</h1>
+            <h2 className="mt-4">{showRegistrationForm ? 'Inscription d\'utilisateur' : 'Déjà inscrit ?'}</h2>
+            {!showRegistrationForm ? (
+                <div>
+            <h3>Connectez vous à votre compte</h3>
+            <Form onSubmit={handleLogin} className="mx-auto">
+                <Col>
+                    <Card border="primary" className="card-sm">
+                        <Card.Body className="card-sm">
+                            <Form.Group controlId="emailSignIn" className="col-md-4 mx-auto mb-2">
+                                <Form.Label>Email:</Form.Label>
+                                <Form.Control
+                                    className="mb-2"
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <Form.Group controlId="passwordSingIn" className="col-md-4 mx-auto mb-2">
+                                <Form.Label>Password:</Form.Label>
+                                <Form.Control
+                                    className="mb-2"
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </Form.Group>
+                        </Card.Body>
+
+                    </Card>
+
+                </Col>
+                <Button type="submit"> Se connecter</Button>
+                <p className="mt-4">Pas encore inscrit ? <Button onClick={() => setShowRegistrationForm(true)}>S'inscrire</Button></p>
+            </Form>
+                </div>
+                ) : (
+                    <div>
         <Form onSubmit={handleSubmit}>
                 <Row>
                     <Col>
@@ -103,7 +154,7 @@ const SignupPage = () => {
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            
+
                             <Form.Group controlId="email">
                             <Form.Label>Email:</Form.Label>
                             <Form.Control
@@ -192,9 +243,13 @@ const SignupPage = () => {
 
                     </Col>
                 </Row>
-            <Button variant="outline-primary" size="sm" type="submit">S'inscrire</Button>
-        </Form>  
+            <Button type="submit"type="submit">S'inscrire</Button>
+            <p className="mt-4">Déja inscrit ? <Button onClick={() => setShowRegistrationForm(false)}>Connectez vous</Button></p>
+        </Form>
+                    </div>
+                )}
     </>
+
     );
 };
 
