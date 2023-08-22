@@ -68,7 +68,6 @@ function Profile() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('userData', userData);
             const response = await fetch(`${USER_URL}/update/${userData.id}`, {
                 method: 'POST',
                 headers: {
@@ -119,7 +118,7 @@ function Profile() {
     };
 
     return (
-        <div className='profile'>
+        <div>
             <Container className='profile-title page-title'>
                 <h2>Mon profil</h2>
             </Container>
@@ -131,8 +130,8 @@ function Profile() {
                     </Button>
                 </Container>
                 :
-                <Container className='profile-details'>
-                    <Form  onSubmit={handleSubmit} className='center' >
+                <Container style={{alignSelf:'center'}}>
+                    <Form  onSubmit={handleSubmit} className="mx-auto">
                         <Form.Group as={Row} controlId='formFirstName'  className='mt-2'>
                             <Form.Label column sm={2}>Prénom:</Form.Label>
                             <Col sm={5}>
