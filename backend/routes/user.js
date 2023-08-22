@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const getCurrentDate = require('../helpers/utils');
 const jwt = require('jsonwebtoken');
+
 const cors = require('cors'); // Importez le module cors
 
 const app = express();
@@ -13,6 +14,8 @@ app.use(cors({
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
 })); // Utilisez le middleware cors
+
+const { validationResult } = require('express-validator');
 
 router.get('/', async (req, res) => {
     res.status(200).send("This is the user route of the API!");
@@ -91,12 +94,46 @@ router.patch('/:id/delete', async (req, res) => {
     }
 });
 
+
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
-    const emailRows = await pool.query(checkEmailQuery, email);
 
+    try {
+        // Validation des données (vous pouvez utiliser express-validator ici)
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const checkEmailQuery = 'SELECT UserID, UserEmail, UserPassword, UserName, UserFirstname FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
+        const emailRows = await pool.query(checkEmailQuery, [email]);
+
+        if (emailRows.length === 0) {
+            return res.status(401).json({ message: 'Email not found' });
+        }
+
+        const user = emailRows[0];
+        const match = await bcrypt.compare(password, user.UserPassword);
+
+        if (!match) {
+            return res.status(401).json({ message: 'Incorrect password' });
+        }
+
+        // Créer un jeton d'authentification JWT
+        const payload = { userId: user.UserID };
+        const secretKey = 'your-secret-key'; // Remplacez par votre clé secrète
+        const options = { expiresIn: '1h' };
+
+        const token = jwt.sign(payload, secretKey, options);
+
+        return res.status(200).json({ token, userId: user.UserID, firstName: user.UserFirstname, lastName: user.UserName });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server error' });
+    }
 });
+
 
 router.post('/update/:id', async (req, res) => {
     try {
