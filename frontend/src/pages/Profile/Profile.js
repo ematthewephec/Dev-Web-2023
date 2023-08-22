@@ -25,24 +25,19 @@ function Profile() {
         street: '',
         city: '',
         zip: '',
+        country:''
         // Ajoutez d'autres champs ici
     });
 
     if (userDataString) {
         // Convertissez la chaîne JSON en objet si userDataString n'est pas undefined
         let data = JSON.parse(userDataString);
-        userData.id = data.id;
-        console.log( userData.id)
-        console.log( data.lastName)
-        console.log( data.idUser)
+        userData.id = data.idUser;
     }
 
 
     const getInfoProfile = async () => {
-        console.log('true')
-        console.log(userData.id)
         if (userData.id !== 0 && userData.id !== undefined) {
-            console.log(userData.id)
             try {
                 const response = await fetch(`${USER_URL}/${userData.id}`);
                 const data = await response.json();
@@ -61,6 +56,7 @@ function Profile() {
                         city: data.addresses[0].City,
                         street: data.addresses[0].Street,
                         zip: data.addresses[0].Postcode,
+                        country: data.addresses[0].Country,
                     }));
                 }
             } catch (error) {
@@ -71,8 +67,8 @@ function Profile() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         try {
+            console.log('userData', userData);
             const response = await fetch(`${USER_URL}/update/${userData.id}`, {
                 method: 'POST',
                 headers: {
@@ -125,7 +121,7 @@ function Profile() {
     return (
         <div className='profile'>
             <Container className='profile-title page-title'>
-                <h2>Profile</h2>
+                <h2>Mon profil</h2>
             </Container>
             {userData.id == 0 ?
                 <Container>
@@ -135,8 +131,8 @@ function Profile() {
                     </Button>
                 </Container>
                 :
-                <Container className='profile-details  text-center'>
-                    <Form  onSubmit={handleSubmit}>
+                <Container className='profile-details'>
+                    <Form  onSubmit={handleSubmit} className='center' >
                         <Form.Group as={Row} controlId='formFirstName'  className='mt-2'>
                             <Form.Label column sm={2}>Prénom:</Form.Label>
                             <Col sm={5}>
@@ -181,7 +177,7 @@ function Profile() {
                             <Col sm={5}>
                                 <Form.Control
                                     type='text'
-                                    value={userData.street}
+                                    value={userData.street ?? ''}
                                     readOnly={!profileModify}
                                     onChange={(e) => setUserData({ ...userData, street: e.target.value })}
                                     // Vous pouvez ajouter une fonction de mise à jour ici
@@ -193,7 +189,7 @@ function Profile() {
                             <Col sm={5}>
                                 <Form.Control
                                     type='text'
-                                    value={userData.city}
+                                    value={userData.city ?? ''}
                                     readOnly={!profileModify}
                                     onChange={(e) => setUserData({ ...userData, city: e.target.value })}
                                     // Vous pouvez ajouter une fonction de mise à jour ici
@@ -206,9 +202,21 @@ function Profile() {
                             <Col sm={5}>
                                 <Form.Control
                                     type='number'
-                                    value={userData.zip}
+                                    value={userData.zip ?? ''}
                                     readOnly={!profileModify}
                                     onChange={(e) => setUserData({ ...userData, zip: e.target.value })}
+                                    // Vous pouvez ajouter une fonction de mise à jour ici
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} controlId='formCountry'  className='mt-2'>
+                            <Form.Label column sm={2}>Pays: </Form.Label>
+                            <Col sm={5}>
+                                <Form.Control
+                                    type='text'
+                                    value={userData.country ?? ''}
+                                    readOnly={!profileModify}
+                                    onChange={(e) => setUserData({ ...userData, country: e.target.value })}
                                     // Vous pouvez ajouter une fonction de mise à jour ici
                                 />
                             </Col>
