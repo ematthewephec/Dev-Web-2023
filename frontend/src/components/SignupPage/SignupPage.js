@@ -68,7 +68,7 @@ const SignupPage = () => {
                     });
                     login(data.token);
                     const userData = {
-                        idUser:data.UserId,
+                        idUser:data.userId,
                         token: data.token,
                         lastName: data.lastName,
                         firstName: data.firstName
