@@ -15,6 +15,10 @@ function Profile() {
         navigate('/connect');
     };
 
+    const reditrectHome = () => {
+        navigate('/');
+    };
+
     const userDataString = Cookies.get('userData');
 
     const [userData, setUserData] = useState({
@@ -192,6 +196,52 @@ function Profile() {
         }
     };
 
+    const handleDelete = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch(`${USER_URL}/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: userData.id }),
+            });
+
+            if (response.ok) {
+                toast.success('Compte supprimer', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+                Cookies.remove('userData');
+                setProfileModify(false)
+                setTimeout(() => {
+                    reditrectHome();
+                }, 1000);
+            } else {
+                setProfileModify(false)
+                toast.error('Erreur lors de la suppression', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            }
+        } catch (error) {
+            console.error('Erreur lors de la requête', error);
+        }
+    };
+
+
     useEffect(() => {
         userDataString && getInfoProfile();
     }, []);
@@ -313,9 +363,18 @@ function Profile() {
                             :null}
                     </Form>
                     {profileModify ? (
-                        <Button variant='secondary' onClick={() => setProfileModify(false)} className='mt-2'>
-                            Annuler
-                        </Button>
+                        <div>
+                            <div>
+                                <Button variant='secondary' onClick={() => setProfileModify(false)} className='mt-2'>
+                                    Annuler
+                                </Button>
+                            </div>
+                            <div>
+                                <Button variant='danger' type='submit' onClick={handleDelete} className='mt-2  btn-lg'>
+                                    Supprimer mon compte
+                                </Button>
+                            </div>
+                        </div>
                     ) : (
                         <div>
                             <Button variant='primary' onClick={() => setProfileModify(true)} className='mt-2'>

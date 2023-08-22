@@ -75,17 +75,18 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.patch('/:id/delete', async (req, res) => {
+router.post('/delete', async (req, res) => {
     try {
-        const userId = req.params.id;
-        const checkUserQuery = 'SELECT * FROM Users WHERE DeletionDate IS NOT NULL AND UserID=?';
+        const userId = req.body.id;
+
+        const checkUserQuery = 'SELECT * FROM Users WHERE DeletionDate IS NULL AND UserID=?';
         const userRows = await pool.query(checkUserQuery, userId);
 
         if (userRows.length === 0) {
             res.status(404).json({message: 'User not found.'});
         } else {
             const deletionDate = getCurrentDate();
-            const patchUserQuery = 'UPDATE Users SET DeletionDate=? WHERE UserID=?';
+            const patchUserQuery = 'UPDATE Users SET DeletionDate=?, UserName="user deleted", UserEmail="user deleted", UserFirstName="user deleted" WHERE UserID=?';
             const result = await pool.query(patchUserQuery, [deletionDate, userId]);
             res.status(200).json({message: 'User successfully deleted.'});
         }

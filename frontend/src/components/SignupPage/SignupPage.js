@@ -135,7 +135,19 @@ const SignupPage = () => {
         })
             .then((response) => response.json())
             .then(() => {
-                window.location.replace('/');
+                toast.success('Compte créer veuillez vous connecter', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             });
     };
     //
