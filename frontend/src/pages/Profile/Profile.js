@@ -35,6 +35,68 @@ function Profile() {
         userData.id = data.idUser;
     }
 
+    const [resetPasswordClicked, setResetPasswordClicked] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
+    const handleResetPasswordClick = () => {
+        setResetPasswordClicked(true);
+    };
+
+    const handlePasswordChange = async (event) => {
+        event.preventDefault();
+
+        // Vérification de la conformité du mot de passe aux critères
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordPattern.test(newPassword)) {
+            // Le mot de passe ne répond pas aux critères, affichez un message d'erreur
+            toast.error('Le mot de passe doit avoir au moins 8 caractères, une majuscule, un caractère spécial et un chiffre', {
+                position: 'top-right',
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+            return;
+        }
+
+        if (newPassword === confirmNewPassword) {
+            // Les mots de passe correspondent, effectuez la mise à jour du mot de passe ici
+            // Par exemple, effectuez une requête pour mettre à jour le mot de passe dans la base de données
+
+            // // Après la mise à jour, réinitialisez les champs de mot de passe
+            // setNewPassword('');
+            // setConfirmNewPassword('');
+
+            // Affichez un message de succès ou utilisez une notification pour informer l'utilisateur
+            toast.success('Mot de passe mis à jour avec succès', {
+                position: 'top-right',
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+        } else {
+            // Les mots de passe ne correspondent pas, affichez un message d'erreur
+            toast.error('Les mots de passe ne correspondent pas', {
+                position: 'top-right',
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+        }
+    };
+
 
     const getInfoProfile = async () => {
         if (userData.id !== 0 && userData.id !== undefined) {
@@ -231,9 +293,50 @@ function Profile() {
                             Annuler
                         </Button>
                     ) : (
-                        <Button variant='primary' onClick={() => setProfileModify(true)} className='mt-2'>
-                            Modifier
-                        </Button>
+                        <div>
+                            <Button variant='primary' onClick={() => setProfileModify(true)} className='mt-2'>
+                                Modifier
+                            </Button>
+                            {resetPasswordClicked ? (
+                                <Form>
+                                    <Form.Group controlId='newPassword'>
+                                        <Form.Label>Nouveau mot de passe :</Form.Label>
+                                        <Col sm={4} className="mx-auto">
+                                        <Form.Control
+                                            type='password'
+                                            value={newPassword}
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                        />
+                                        </Col>
+                                    </Form.Group>
+                                    <Form.Group controlId='confirmNewPassword'>
+                                        <Form.Label>Confirmer le nouveau mot de passe :</Form.Label>
+                                        <Col sm={4} className="mx-auto">
+                                        <Form.Control
+                                            type='password'
+                                            value={confirmNewPassword}
+                                            onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                        />
+                                        </Col>
+                                    </Form.Group>
+                                    <div className="mt-2">
+                                        <Button variant='primary'  className="btn-sm" onClick={() => setResetPasswordClicked(false)}>
+                                            Annuler
+                                        </Button>
+                                    </div>
+                                    <Button variant='primary' type='submit' className="mt-2" onClick={handlePasswordChange}>
+                                        Réinitialiser le mot de passe
+                                    </Button>
+                                </Form>
+                            ) : (
+                                <div>
+                                    <p className='mt-4'>
+                                        Changer votre mot de passe ?{' '}
+                                        <Button className="btn-sm" onClick={handleResetPasswordClick}>Réinitialiser</Button>
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </Container>
             }
