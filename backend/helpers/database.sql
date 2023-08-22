@@ -1,6 +1,7 @@
 CREATE TABLE Users (
     UserID INT NOT NULL AUTO_INCREMENT,
     UserName VARCHAR(60),
+    UserFirstname VARCHAR(60),
     UserEmail VARCHAR(60),
     UserPassword VARCHAR(60),
     CreationDate DATE,
@@ -23,6 +24,7 @@ CREATE TABLE Addresses (
     UserID INT,
     Street VARCHAR(100),
     Postcode INT,
+    City VARCHAR(30),
     Country VARCHAR(30),
     PRIMARY KEY (AddressID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
