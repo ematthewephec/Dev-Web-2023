@@ -75,17 +75,18 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.patch('/:id/delete', async (req, res) => {
+router.post('/delete', async (req, res) => {
     try {
-        const userId = req.params.id;
-        const checkUserQuery = 'SELECT * FROM Users WHERE DeletionDate IS NOT NULL AND UserID=?';
+        const userId = req.body.id;
+
+        const checkUserQuery = 'SELECT * FROM Users WHERE DeletionDate IS NULL AND UserID=?';
         const userRows = await pool.query(checkUserQuery, userId);
 
         if (userRows.length === 0) {
             res.status(404).json({message: 'User not found.'});
         } else {
             const deletionDate = getCurrentDate();
-            const patchUserQuery = 'UPDATE Users SET DeletionDate=? WHERE UserID=?';
+            const patchUserQuery = 'UPDATE Users SET DeletionDate=?, UserName="user deleted", UserEmail="user deleted", UserFirstName="user deleted" WHERE UserID=?';
             const result = await pool.query(patchUserQuery, [deletionDate, userId]);
             res.status(200).json({message: 'User successfully deleted.'});
         }
@@ -160,10 +161,39 @@ router.post('/update/:id', async (req, res) => {
         const updateUserQuery = 'UPDATE Users SET UserName=?, UserFirstname=?, UserEmail=? WHERE UserID=?';
         const result = await pool.query(updateUserQuery, [updateData.userName, updateData.firstName, updateData.email, userId]);
 
+        const updateUserAddressQuery = 'UPDATE Addresses SET Street=?, Postcode=?, Country=?, City=? WHERE UserID=?';
+        const result2 = await pool.query(updateUserAddressQuery, [updateData.street, updateData.zip, updateData.country, updateData.city, userId]);
+
         res.status(200).json({ message: 'Informations utilisateur mises à jour avec succès.' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Une erreur s\'est produite lors de la mise à jour des informations.' });
+    }
+});
+
+router.post('/reset-password', async (req, res) => {
+    try {
+        const updateData = req.body;
+        const userId = updateData.id;
+        const password = updateData.password
+
+
+        const encryptedPass = await bcrypt.hash(password, saltRounds);
+
+        const checkUserQuery = 'SELECT * FROM Users WHERE UserID=? AND DeletionDate is NULL ';
+        const userRows = await pool.query(checkUserQuery, userId);
+
+        if (userRows.length === 0) {
+            res.status(404).json({ message: 'Erreur lors de la mise à jour' });
+            return;
+        }
+
+        const updateUserQuery = 'UPDATE Users SET UserPassword=? WHERE UserID=?';
+        const result = await pool.query(updateUserQuery, [encryptedPass, userId]);
+
+        res.status(200).json({ message: 'Mot de passe mise à jour avec succès.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Une erreur s\'est produite lors de la mise à jour.' });
     }
 });
 
