@@ -170,4 +170,30 @@ router.post('/update/:id', async (req, res) => {
     }
 });
 
+router.post('/reset-password', async (req, res) => {
+    try {
+        const updateData = req.body;
+        const userId = updateData.id;
+        const password = updateData.password
+
+
+        const encryptedPass = await bcrypt.hash(password, saltRounds);
+
+        const checkUserQuery = 'SELECT * FROM Users WHERE UserID=? AND DeletionDate is NULL ';
+        const userRows = await pool.query(checkUserQuery, userId);
+
+        if (userRows.length === 0) {
+            res.status(404).json({ message: 'Erreur lors de la mise à jour' });
+            return;
+        }
+
+        const updateUserQuery = 'UPDATE Users SET UserPassword=? WHERE UserID=?';
+        const result = await pool.query(updateUserQuery, [encryptedPass, userId]);
+
+        res.status(200).json({ message: 'Mot de passe mise à jour avec succès.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Une erreur s\'est produite lors de la mise à jour.' });
+    }
+});
+
 module.exports = router;

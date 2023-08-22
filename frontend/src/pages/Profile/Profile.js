@@ -64,24 +64,48 @@ function Profile() {
         }
 
         if (newPassword === confirmNewPassword) {
-            // Les mots de passe correspondent, effectuez la mise à jour du mot de passe ici
-            // Par exemple, effectuez une requête pour mettre à jour le mot de passe dans la base de données
 
-            // // Après la mise à jour, réinitialisez les champs de mot de passe
-            // setNewPassword('');
-            // setConfirmNewPassword('');
+            const data = {
+                id: userData.id,
+                password: newPassword,
+            };
+
+            const response = await fetch(`${USER_URL}/reset-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
 
             // Affichez un message de succès ou utilisez une notification pour informer l'utilisateur
-            toast.success('Mot de passe mis à jour avec succès', {
-                position: 'top-right',
-                autoClose: 1500,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-            });
+            if(response.ok){
+                toast.success('Mot de passe mis à jour 👍', {
+                    position: 'top-right',
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'colored',
+                });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            }
+            else{
+                toast.error('Erreur lors de la mise à jour', {
+                    position: 'top-right',
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'colored',
+                });
+            }
         } else {
             // Les mots de passe ne correspondent pas, affichez un message d'erreur
             toast.error('Les mots de passe ne correspondent pas', {
