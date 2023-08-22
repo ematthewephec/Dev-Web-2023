@@ -51,7 +51,7 @@ router.get('/:id', async(req, res) => {
 router.post('/', async (req, res) => {
     try {
       const {credentials, addressInfo} = req.body;
-      const {username, email, password} = credentials
+      const {username, email, password, firstname} = credentials
       const checkEmailQuery = 'SELECT UserEmail FROM Users WHERE DeletionDate IS NULL AND UserEmail=?';
       const emailRows = await pool.query(checkEmailQuery, email);
 
@@ -60,13 +60,13 @@ router.post('/', async (req, res) => {
       } else {
         const creationDate = getCurrentDate();
         const encryptedPass = await bcrypt.hash(password, saltRounds);
-        const registerQuery = 'INSERT INTO Users(UserName, UserEmail, UserPassword, CreationDate) VALUES (?,?,?,?)';
-        const userResult = await pool.query(registerQuery, [username, email, encryptedPass, creationDate]);
+        const registerQuery = 'INSERT INTO Users(UserName, UserEmail, UserPassword, CreationDate, UserFirstname) VALUES (?,?,?,?,?)';
+        const userResult = await pool.query(registerQuery, [username, email, encryptedPass, creationDate, firstname]);
 
         const userId = userResult.insertId;
-        const {street, postalCode, country} = addressInfo;
-        const addressQuery = 'INSERT INTO Addresses(UserID, Street, Postcode, Country) VALUES (?,?,?,?)';
-        const addressResult = await pool.query(addressQuery, [userId, street, postalCode, country]);
+        const {street, postalCode, country, city} = addressInfo;
+        const addressQuery = 'INSERT INTO Addresses(UserID, Street, Postcode, Country, City) VALUES (?,?,?,?, ?)';
+        const addressResult = await pool.query(addressQuery, [userId, street, postalCode, country, city]);
 
         res.status(200).json({message: `User ${userId} registered!`});
       }
