@@ -43,9 +43,12 @@ function IndexPage(){
                     <Card.Text>
                         {title}
                     </Card.Text>
-                    <div>
-                        <Button onClick={()=>redirectToOrders()}>Mes commandes</Button>
-                    </div>
+                    {userData ?
+                        <div>
+                            <Button onClick={() => redirectToOrders()}>Mes commandes</Button>
+                        </div>
+                        :null
+                    }
                 </Card.Body>
             </Card>
         </div>
