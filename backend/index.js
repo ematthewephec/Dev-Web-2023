@@ -19,6 +19,7 @@ const products = require('./routes/product');
 const facture = require('./routes/facture');
 const baskets = require('./routes/basket');
 const users = require('./routes/user');
+const orders = require('./routes/orders');
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/products', products);
 app.use('/facture', facture);
 app.use('/baskets', baskets);
 app.use('/users', users);
+app.use('/orders', orders);
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
