@@ -6,43 +6,37 @@ router.get('/', (req, res) => {
     res.status(200).send("This is the order route of the API!");
 });
 
-router.post('/getOrders', async(req, res) => {
+router.post('/getOrders', async (req, res) => {
     try {
         const userId = req.body.id;
 
         // Obtenir les commandes de l'utilisateur
-        const ordersQuery = 'SELECT * FROM Orders WHERE UserID=?';
-        const ordersResult = await pool.query(ordersQuery, userId);
-
-        const ordersWithArticles = [];
-
-        // Pour chaque commande de l'utilisateur
-        for (const order of ordersResult) {
-            const orderArticleQuery = `
-            SELECT OrderArticle.ProductID, Products.ProductName, Orders.OrderDate 
-            FROM OrderArticle 
-            INNER JOIN Orders ON OrderArticle.OrderID = Orders.OrderID 
-            INNER JOIN Products ON OrderArticle.ProductID = Products.ProductID 
-            WHERE Orders.UserID=?
+        const ordersQuery = `
+            SELECT
+                o.OrderID AS OrderID,
+                o.OrderDate AS OrderDate,
+                o.OrderSubTotal AS OrderPrice,
+                GROUP_CONCAT(p.ProductName) AS ProductName
+            FROM
+                Orders o
+            JOIN
+                Users u ON o.UserID = u.UserID
+            JOIN
+                OrderArticle oa ON o.OrderID = oa.OrderID
+            JOIN
+                Products p ON oa.ProductID = p.ProductID
+            WHERE
+                u.UserID = ?
+            GROUP BY
+                o.OrderID, o.OrderDate
         `;
-            const orderArticlesResult = await pool.query(orderArticleQuery, userId);
-
-            // Ajouter les informations à l'array
-            for (const article of orderArticlesResult) {
-                ordersWithArticles.push({
-                    OrderID: order.OrderID,
-                    ProductID: article.ProductID,
-                    ProductName: article.ProductName,
-                    OrderDate: order.OrderDate,
-                });
-            }
-        }
-
-        res.status(200).json(ordersWithArticles);
+        const ordersResult = await pool.query(ordersQuery, userId);
+        res.status(200).json(ordersResult);
     } catch (err) {
         res.status(404).send('User not found!');
     }
 });
+
 // router.post('/add/:userId/:productId/:quantity', async(req, res) => {
 //     const {userId, productId, quantity} = req.params;
 //     const basketQuery = 'INSERT INTO Baskets (UserID, ProductID, ItemQuantity) VALUES (?, ?, ?)';

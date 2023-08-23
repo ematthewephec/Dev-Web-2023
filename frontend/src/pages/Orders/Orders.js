@@ -21,17 +21,11 @@ function Orders() {
 
     const userDataString = Cookies.get('userData');
     const [ordersData, setOrdersData] = useState([]);
+    const [sortAscending, setSortAscending] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [userData, setUserData] = useState({
-        id:0,
-        firstName: '',
-        userName: '',
-        email: '',
-        street: '',
-        city: '',
-        zip: '',
-        country:''
-        // Ajoutez d'autres champs ici
+        id:0
     });
 
     if (userDataString) {
@@ -40,9 +34,19 @@ function Orders() {
         userData.id = data.idUser;
     }
 
+    useEffect(() => {
+        if (!isLoading) {
+            sortOrders();
+        }
+    }, [sortAscending]);
+
+    useEffect(() => {
+       getOrders();
+    }, []);
+
+
     const getOrders = async () => {
         try {
-            console.log(userData.id)
             const response = await fetch(`${ORDERS_URL}/getOrders`, {
                 method: 'POST',
                 headers: {
@@ -53,27 +57,36 @@ function Orders() {
 
             if (response.ok) {
                 const orders = await response.json();
-                setOrdersData(orders)
-                // Traiter les données des commandes reçues du serveur, par exemple, les afficher
-                console.log('Commandes:', orders);
-
+                setOrdersData(orders);
+                setIsLoading(false); // Mark loading as complete
             }
 
         } catch (error) {
             console.error('Une erreur s\'est produite:', error);
         }
+    };
 
-    }
 
     function formatDate(dateString) {
         const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     }
 
-    useEffect(() => {
-        getOrders()
-    }, []);
+    const sortOrders = () => {
+        const sortedOrders = [...ordersData].sort((a, b) => {
+            const dateA = new Date(a.OrderDate);
+            const dateB = new Date(b.OrderDate);
 
+            return sortAscending ? dateA - dateB : dateB - dateA;
+        });
+
+        setOrdersData(sortedOrders);
+    };
+
+    const toggleSortOrder = () => {
+        setSortAscending((prevSort) => !prevSort);
+        sortOrders(); // Call the sorting function here
+    };
 
     return (
         <div>
@@ -90,14 +103,17 @@ function Orders() {
                 :
                 <div className="container mt-5">
                     <h2 className="mb-4">Récapitulatif des Commandes</h2>
+                    <button className="btn btn-primary mb-3" onClick={toggleSortOrder}>
+                        {sortAscending ? 'Order décroissant' : 'Order croissant'}
+                    </button>
                     <div className="table-scroll">
                     <table className="table table-striped">
                         <thead>
                         <tr>
                             <th>Commandes</th>
                             <th>Date de commande</th>
-                            <th>Produit</th>
-                            <th>Nom</th>
+                            <th>Produits</th>
+                            <th>Total</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -105,8 +121,8 @@ function Orders() {
                             <tr key={index}>
                                 <td>#{order.OrderID}</td>
                                 <td>{formatDate(order.OrderDate)}</td>
-                                <td>#{order.ProductID}</td>
                                 <td>{order.ProductName}</td>
+                                <td>{order.OrderPrice}€</td>
                             </tr>
                         ))}
                         </tbody>
