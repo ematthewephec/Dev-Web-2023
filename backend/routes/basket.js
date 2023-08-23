@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../helpers/database');
+const {toFloat} = require("validator");
 
 router.get('/', (req, res) => {
     res.status(200).send("This is the basket route of the API!");
@@ -52,6 +53,47 @@ router.delete('/:userId/clear', async(req, res) => {
             res.status(404).send('User not found!') :
             res.status(404).send('No items found in basket!') :
             res.status(200).json(result);
+    } catch (err) {
+        res.status(404).send('Not found!');
+    }
+})
+
+router.post('/validate', async(req, res) => {
+    try {
+        const userId = req.body.id;
+
+        //Step 1: Insert into Orders table
+        const createOrderQuery = 'INSERT INTO Orders (UserID, OrderSubtotal) VALUES (?, ?)';
+        const createOrderResult = await pool.query(createOrderQuery, [userId, 0]); // Initial price total
+        const orderId = createOrderResult.insertId;
+
+        // // Step 2: Get user's basket
+        const basketQuery = 'SELECT * FROM Baskets WHERE UserID = ?';
+        const basketResult = await pool.query(basketQuery, [userId]);
+        const basketItems = basketResult[0];
+
+        let totalPrice = 0; // Initialize total price
+
+        // // Step 3: Insert into OrderArticle table for each item in the basket
+        for (const item of basketResult) {
+            const insertOrderArticleQuery = 'INSERT INTO OrderArticle (OrderID, ProductID) VALUES (?, ?)';
+            await pool.query(insertOrderArticleQuery, [orderId, item.ProductID]);
+
+            const getProductPriceQuery = 'SELECT ProductPrice FROM Products WHERE ProductID = ?';
+            const productPriceResult = await pool.query(getProductPriceQuery, [item.ProductID]);
+            const productPrice = toFloat(productPriceResult[0].ProductPrice);
+
+            totalPrice += productPrice;
+       }
+
+        // // Step 4: Update the total price in Orders table
+        const updatePriceQuery = 'UPDATE Orders SET OrderSubtotal = ? WHERE OrderID = ?';
+        await pool.query(updatePriceQuery, [totalPrice, orderId]);
+
+        const empyBasket = 'DELETE FROM Baskets WHERE UserID=?';
+        const result = await pool.query(empyBasket, userId);
+
+        res.status(200).json({ message: 'Basket validated and orders created.', totalPrice});
     } catch (err) {
         res.status(404).send('Not found!');
     }

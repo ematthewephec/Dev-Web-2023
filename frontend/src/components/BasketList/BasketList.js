@@ -2,10 +2,22 @@ import './BasketList.css';
 import React, { useState } from 'react';
 import { Button, Container, Card, ListGroup, Col, Row } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
+import {toast} from "react-toastify";
+import {BASKET_URL} from "../utils/Constants";
+import Cookies from "js-cookie";
 
 
 function BasketList(props) {
     const [showModal, setShowModal] = useState(false);
+    const userDataString = Cookies.get('userData');
+    let userData = null; // Initialisez userData avec null par défaut
+
+    if (userDataString) {
+        // Convertissez la chaîne JSON en objet si userDataString n'est pas undefined
+        userData = JSON.parse(userDataString);
+    }
+
+
     const items = props.basket.map((item) =>
         <ListGroup.Item key={item.ItemIndex}>
             <Row>
@@ -22,6 +34,47 @@ function BasketList(props) {
             </Row>
         </ListGroup.Item>
     );
+
+    const handleSubmit  = async (event)  => {
+        const response = await fetch(`${BASKET_URL}/validate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id: userData.idUser} ),
+        });
+
+        // Affichez un message de succès ou utilisez une notification pour informer l'utilisateur
+        if(response.ok){
+            console.log('Response:', response);
+            console.log('Response JSON:', await response.json());
+            toast.success('Commande envoyée', {
+                position: 'top-right',
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        }
+        else{
+            toast.error('Erreur lors de la commande', {
+                position: 'top-right',
+                autoClose: 1500,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+        }
+    }
 
     const recap = props.basket.map((item) =>
         <ListGroup.Item key={item.ItemIndex}>
@@ -81,7 +134,7 @@ function BasketList(props) {
                     <button
                         type="button"
                         className="btn btn-success"
-                        onClick={() => setShowModal(!showModal)}
+                        onClick={() => handleSubmit()}
                     >
                         Valider
                     </button>

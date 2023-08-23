@@ -3,8 +3,9 @@ import React, {useEffect, useState} from 'react';
 import {Container, Button} from 'react-bootstrap';
 import './Basket.css';
 import BasketList from '../../components/BasketList/BasketList';
-import { BASKET_URL } from '../../components/utils/Constants';
+import {BASKET_URL} from '../../components/utils/Constants';
 import Cookies from "js-cookie";
+import {toast} from "react-toastify";
 
 function Basket() {
     const [basket, setBasket] = useState([]);
