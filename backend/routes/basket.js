@@ -62,19 +62,16 @@ router.post('/validate', async(req, res) => {
     try {
         const userId = req.body.id;
 
-        //Step 1: Insert into Orders table
         const createOrderQuery = 'INSERT INTO Orders (UserID, OrderSubtotal) VALUES (?, ?)';
         const createOrderResult = await pool.query(createOrderQuery, [userId, 0]); // Initial price total
         const orderId = createOrderResult.insertId;
 
-        // // Step 2: Get user's basket
         const basketQuery = 'SELECT * FROM Baskets WHERE UserID = ?';
         const basketResult = await pool.query(basketQuery, [userId]);
         const basketItems = basketResult[0];
 
         let totalPrice = 0; // Initialize total price
 
-        // // Step 3: Insert into OrderArticle table for each item in the basket
         for (const item of basketResult) {
             const insertOrderArticleQuery = 'INSERT INTO OrderArticle (OrderID, ProductID) VALUES (?, ?)';
             await pool.query(insertOrderArticleQuery, [orderId, item.ProductID]);
@@ -86,14 +83,13 @@ router.post('/validate', async(req, res) => {
             totalPrice += productPrice;
        }
 
-        // // Step 4: Update the total price in Orders table
         const updatePriceQuery = 'UPDATE Orders SET OrderSubtotal = ? WHERE OrderID = ?';
         await pool.query(updatePriceQuery, [totalPrice, orderId]);
 
         const empyBasket = 'DELETE FROM Baskets WHERE UserID=?';
         const result = await pool.query(empyBasket, userId);
 
-        res.status(200).json({ message: 'Basket validated and orders created.', totalPrice});
+        res.status(200).json({ message: 'Basket validated and orders created.'});
     } catch (err) {
         res.status(404).send('Not found!');
     }

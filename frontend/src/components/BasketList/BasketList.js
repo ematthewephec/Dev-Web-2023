@@ -2,10 +2,9 @@ import './BasketList.css';
 import React, { useState } from 'react';
 import { Button, Container, Card, ListGroup, Col, Row } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
-import {toast} from "react-toastify";
+import {ToastContainer, toast} from "react-toastify";
 import {BASKET_URL} from "../utils/Constants";
 import Cookies from "js-cookie";
-
 
 function BasketList(props) {
     const [showModal, setShowModal] = useState(false);
@@ -46,8 +45,6 @@ function BasketList(props) {
 
         // Affichez un message de succès ou utilisez une notification pour informer l'utilisateur
         if(response.ok){
-            console.log('Response:', response);
-            console.log('Response JSON:', await response.json());
             toast.success('Commande envoyée', {
                 position: 'top-right',
                 autoClose: 1500,
@@ -58,6 +55,7 @@ function BasketList(props) {
                 progress: undefined,
                 theme: 'colored',
             });
+            setShowModal(false);
             setTimeout(() => {
                 window.location.reload();
             }, 1500);
@@ -141,6 +139,7 @@ function BasketList(props) {
                     <Button onClick={() => setShowModal(!showModal)}>Fermer</Button>
                 </Modal.Footer>
             </Modal>
+            <ToastContainer />
         </div>
     )
 }
