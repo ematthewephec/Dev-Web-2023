@@ -22,6 +22,13 @@ function BasketList(props) {
         return JSON.parse(localStorage.getItem('localCart')) || [];
     }
 
+    function removeItemFromLocalCart(itemIndex) {
+        const cart = JSON.parse(localStorage.getItem('localCart')) || [];
+        const updatedCart = cart.filter(item => item.ItemIndex !== itemIndex);
+        localStorage.setItem('localCart', JSON.stringify(updatedCart));
+    }
+
+
     useEffect(() => {
         if (userData) {
             // Si l'utilisateur est connecté, mettez à jour le panier avec les données du panier utilisateur
@@ -40,11 +47,17 @@ function BasketList(props) {
                 <Col>QTY: {item.ItemQuantity}</Col>
                 <Col>{(item.ProductPrice * item.ItemQuantity).toFixed(2)}€</Col>
                 <Col>
-                    <Button
+                    {userData ?
+                        <Button
                         onClick={() => props.removeItem(item.ItemIndex)}
                     >
                         Delete Item
-                    </Button>
+                    </Button> :
+                        <Button
+                            onClick={() => removeItemFromLocalCart(item.ItemIndex)}// ici faire la suppresion en local ->chatgpt
+                        >
+                            Delete Item
+                        </Button>}
                 </Col>
             </Row>
         </ListGroup.Item>
