@@ -14,10 +14,12 @@ function ArticlesCard(props){
         // Convertissez la chaîne JSON en objet si userDataString n'est pas undefined
         userData = JSON.parse(userDataString);
     }
-    function addToLocalCart(itemIndex, productName, productPrice, quantity) {
+    function addToLocalCart(itemId, productName, productPrice, quantity) {
         const cart = JSON.parse(localStorage.getItem('localCart')) || [];
+        const itemIndex = Date.now() + Math.random().toString(36).substr(2, 9);
         const newItem = {
             ItemIndex: itemIndex,
+            itemId: itemId,
             ProductName: productName,
             ProductPrice: productPrice,
             ItemQuantity: quantity
@@ -75,7 +77,6 @@ function ArticlesCard(props){
         }
         else{
             const product = props.products;
-            console.log(product.ProductID)
             addToLocalCart(product.ProductID, product.ProductName, product.ProductPrice, 1);
         }
 

@@ -26,6 +26,20 @@ function BasketList(props) {
         const cart = JSON.parse(localStorage.getItem('localCart')) || [];
         const updatedCart = cart.filter(item => item.ItemIndex !== itemIndex);
         localStorage.setItem('localCart', JSON.stringify(updatedCart));
+
+        toast.success('Article supprimé', {
+            position: 'top-right',
+            autoClose: 1500,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+        });
+        setTimeout(() => {
+            window.location.reload();
+        }, 800);
     }
 
 
@@ -123,6 +137,7 @@ function BasketList(props) {
     };
 
     function clearCart(){
+        localStorage.removeItem('localCart');
         toast.success('Panier vider ', {
             position: 'top-right',
             autoClose: 1500,
