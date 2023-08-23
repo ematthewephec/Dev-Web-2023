@@ -9,6 +9,7 @@ import Articles from '../Articles/Articles';
 import Basket from '../Basket/Basket';
 import Profile from '../Profile/Profile';
 import Connections from '../connections/Connections';
+import Orders from '../Orders/Orders';
 
 import Footer from '../../components/Footer/Footer';
 
@@ -24,6 +25,7 @@ function App() {
           <Route path='/connect' element={<Connections/>}/>
           <Route path='/basket' element={<Basket/>}/>
           <Route path='/profile' element={<Profile/>}/>
+          <Route path='/orders' element={<Orders/>}/>
         </Routes>
         <Footer/>
       </Router>

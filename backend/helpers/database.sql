@@ -48,6 +48,13 @@ CREATE TABLE Orders (
     FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID)
 );
 
+CREATE TABLE OrderArticle (
+    OrderId INT,
+    ProductID INT,
+    FOREIGN KEY (OrderId) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
 CREATE TABLE Baskets (
     UserID INT,
     ItemIndex INT NOT NULL AUTO_INCREMENT,
@@ -78,3 +85,5 @@ CREATE TABLE AdminUsers (
     AdminAccess BOOLEAN,
     PRIMARY KEY (AdminUserID)
 );
+
+
