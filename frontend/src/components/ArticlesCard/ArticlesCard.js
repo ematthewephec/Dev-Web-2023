@@ -14,42 +14,71 @@ function ArticlesCard(props){
         // Convertissez la chaîne JSON en objet si userDataString n'est pas undefined
         userData = JSON.parse(userDataString);
     }
+    function addToLocalCart(itemIndex, productName, productPrice, quantity) {
+        const cart = JSON.parse(localStorage.getItem('localCart')) || [];
+        const newItem = {
+            ItemIndex: itemIndex,
+            ProductName: productName,
+            ProductPrice: productPrice,
+            ItemQuantity: quantity
+        };
+        cart.push(newItem);
+        localStorage.setItem('localCart', JSON.stringify(cart));
+        toast.success('Produit ajouté au panier avec succès!', {
+            position: 'top-right',
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+        });
+    }
 
     const  addBasket = async () =>  {
-        const productId = props.products.ProductID;
-        const quantity = 1;
-        const userId = userData.idUser;
-        try {
-            const response = await fetch(BASKET_URL + `/add/${userId}/${productId}/${quantity}`, {
-                method: 'POST',
-            });
+        if(userData){
+            const productId = props.products.ProductID;
+            const quantity = 1;
+            const userId = userData.idUser;
+            try {
+                const response = await fetch(BASKET_URL + `/add/${userId}/${productId}/${quantity}`, {
+                    method: 'POST',
+                });
 
-            if (response.ok) {
-                toast.success('Produit ajouté au panier avec succès!', {
-                    position: 'top-right',
-                    autoClose: 1000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'colored',
-                });
-            } else {
-                toast.error('Une erreur est survenue lors de l\'ajout au panier.', {
-                    position: 'top-right',
-                    autoClose: 1500,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'colored',
-                });
+                if (response.ok) {
+                    toast.success('Produit ajouté au panier avec succès!', {
+                        position: 'top-right',
+                        autoClose: 1000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'colored',
+                    });
+                } else {
+                    toast.error('Une erreur est survenue lors de l\'ajout au panier.', {
+                        position: 'top-right',
+                        autoClose: 1500,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'colored',
+                    });
+                }
+            } catch (error) {
+                console.error('Une erreur s\'est produite:', error);
             }
-        } catch (error) {
-            console.error('Une erreur s\'est produite:', error);
         }
+        else{
+            const product = props.products;
+            console.log(product.ProductID)
+            addToLocalCart(product.ProductID, product.ProductName, product.ProductPrice, 1);
+        }
+
     };
 
     return(

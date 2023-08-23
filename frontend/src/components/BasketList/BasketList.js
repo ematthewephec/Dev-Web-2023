@@ -1,5 +1,5 @@
 import './BasketList.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Container, Card, ListGroup, Col, Row } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import {ToastContainer, toast} from "react-toastify";
@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 
 function BasketList(props) {
     const [showModal, setShowModal] = useState(false);
+    const [basket, setBasket] = useState([]);
     const userDataString = Cookies.get('userData');
     let userData = null; // Initialisez userData avec null par défaut
 
@@ -17,7 +18,22 @@ function BasketList(props) {
     }
 
 
-    const items = props.basket.map((item) =>
+    function getLocalCart() {
+        return JSON.parse(localStorage.getItem('localCart')) || [];
+    }
+
+    useEffect(() => {
+        if (userData) {
+            // Si l'utilisateur est connecté, mettez à jour le panier avec les données du panier utilisateur
+            setBasket(props.basket);
+        } else {
+            // Si l'utilisateur n'est pas connecté, récupérez les données du panier local
+            const localCart = getLocalCart();
+            setBasket(localCart);
+        }
+    }, [userData, props.basket]);
+
+    const items = basket.map((item) =>
         <ListGroup.Item key={item.ItemIndex}>
             <Row>
                 <Col>{item.ProductName}</Col>
@@ -35,46 +51,51 @@ function BasketList(props) {
     );
 
     const handleSubmit  = async (event)  => {
-        const response = await fetch(`${BASKET_URL}/validate`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({id: userData.idUser} ),
-        });
+        if (userData) {
+            const response = await fetch(`${BASKET_URL}/validate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: userData.idUser }),
+            });
+            if(response.ok){
+                toast.success('Commande envoyée', {
+                    position: 'top-right',
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'colored',
+                });
+                setShowModal(false);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            }
+            else{
+                toast.error('Erreur lors de la commande', {
+                    position: 'top-right',
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'colored',
+                });
+            }
 
-        // Affichez un message de succès ou utilisez une notification pour informer l'utilisateur
-        if(response.ok){
-            toast.success('Commande envoyée', {
-                position: 'top-right',
-                autoClose: 1500,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-            });
-            setShowModal(false);
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
+        } else {
+            // Gérer le cas où userData est null
+            console.error('userData is null');
         }
-        else{
-            toast.error('Erreur lors de la commande', {
-                position: 'top-right',
-                autoClose: 1500,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: 'colored',
-            });
-        }
+
     }
 
-    const recap = props.basket.map((item) =>
+    const recap = basket.map((item) =>
         <ListGroup.Item key={item.ItemIndex}>
             <Row>
                 <Col>{item.ProductName}</Col>
@@ -88,17 +109,33 @@ function BasketList(props) {
         setShowModal(false);
     };
 
-    const subtotal = props.basket.reduce((acc, obj) => acc + Number((obj.ProductPrice * obj.ItemQuantity).toFixed(2)), 0).toFixed(2);
+    function clearCart(){
+        toast.success('Panier vider ', {
+            position: 'top-right',
+            autoClose: 1500,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
+        });
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+
+    const subtotal = basket.reduce((acc, obj) => acc + Number((obj.ProductPrice * obj.ItemQuantity).toFixed(2)), 0).toFixed(2);
 
     return(
         <div className='basketList'>
             <Container className='basketList-list'>
-                {props.basket.length < 1 &&
+                {basket.length < 1 &&
                     <>
                         <p> Votre panier est vide! </p>
                     </>
                 }
-                {props.basket.length >= 1 &&
+                {basket.length >= 1 &&
                     <>
                         <Card className="card bg-secondary text-left">
                             <Card.Body className='card-body basket'>
@@ -107,12 +144,16 @@ function BasketList(props) {
                                 </ListGroup>
                             </Card.Body>
                             <p className="text-right">Subtotal: {subtotal}€</p>
-                            <Button variant="danger" onClick={() => props.clearBasket()}>Clear Basket</Button>
+                            {userData ?
+                                <Button variant="danger" onClick={() => props.clearBasket()}>Clear Basket</Button>
+                                :
+                                <Button variant="danger"  onClick={() =>  clearCart()}>Clear Basket</Button>
+                            }
                         </Card>
                     </>
                 }
             </Container>
-            {props.basket.length >= 1 ?
+            {basket.length >= 1 ?
                 <div className="mt-2">
                     <Button onClick={() => setShowModal(!showModal)}>
                         Valider ma commande

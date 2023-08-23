@@ -18,13 +18,15 @@ function Basket() {
     }
 
     const getBasket = async () => {
-        const userId = userData.idUser;
-        fetch(`${BASKET_URL}/${userId}`)
-        .then((response) => response.json())
-        .then((data) => {
-            setBasket(data);
-            return;
-        })
+        if(userData){
+            const userId = userData.idUser;
+            fetch(`${BASKET_URL}/${userId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setBasket(data);
+                    return;
+                })
+        }
     }
 
     const deleteItemFromBasket = (itemIndex) => {
