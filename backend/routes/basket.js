@@ -22,7 +22,7 @@ router.get('/:userId', async(req, res) => {
 router.post('/add/:userId/:productId/:quantity', async(req, res) => {
     const {userId, productId, quantity} = req.params;
     const basketQuery = 'INSERT INTO Baskets (UserID, ProductID, ItemQuantity) VALUES (?, ?, ?)';
-    const result = await pool.query(basketQuery, ['1', productId, '1']);
+    const result = await pool.query(basketQuery, [userId, productId, '1']);
     res.status(200).json(result);
 });
 
