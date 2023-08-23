@@ -102,7 +102,7 @@ function Orders() {
                 </Container>
                 :
                 <div className="container mt-5">
-                    <h2 className="mb-4">Récapitulatif des Commandes</h2>
+                    <h2 className="mb-4">Récapitulatif de vos commandes</h2>
                     <button className="btn btn-primary mb-3" onClick={toggleSortOrder}>
                         {sortAscending ? 'Order décroissant' : 'Order croissant'}
                     </button>
