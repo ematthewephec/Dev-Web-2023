@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const corsOptions = {
     origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'DELETE']
+    methods: ['GET', 'POST', 'PATCH', 'DELETE']
 };
 
 /* ROUTE IMPORT */
@@ -20,6 +20,7 @@ const facture = require('./routes/facture');
 const baskets = require('./routes/basket');
 const users = require('./routes/user');
 const orders = require('./routes/orders');
+
 
 const app = express();
 

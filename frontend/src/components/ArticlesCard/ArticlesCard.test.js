@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ArticlesCard from './ArticlesCard';
 
@@ -12,6 +13,7 @@ describe('Component rendering test <ArticlesCard />', () => {
 })
 
 const mockProduct = {
+  ProductID: 1,
   ProductName: 'Product',
   ProductDesc: 'This is the description for Product 1',
   ProductPrice: 9.99,
