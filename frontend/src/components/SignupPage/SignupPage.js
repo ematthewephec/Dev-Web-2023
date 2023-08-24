@@ -112,30 +112,54 @@ const SignupPage = () => {
         postalCode: '',
         streetNumber: '',
         country: '',
+        city:''
     });
 
     const sendForm = (formData) => {
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordPattern.test(formData.password)) {
+            // Le mot de passe ne répond pas aux critères, affichez un message d'erreur
+            toast.error('Le mot de passe doit avoir au moins 8 caractères, une majuscule, un caractère spécial et un chiffre', {
+                position: 'top-right',
+                autoClose: 4000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            });
+            return;
+        }
         fetch(`${USER_URL}`, {
             method: 'POST',
             body: formData ? JSON.stringify({
                 credentials: {
-                    username: `${formData.firstName} ${formData.lastName}`,
+                    username: formData.lastName,
+                    firstname: formData.firstName,
                     email: formData.email,
                     password: formData.password
                 },
                 addressInfo: {
                     street: `${formData.address} ${formData.streetNumber}`,
                     postalCode: formData.postalCode,
-                    country: formData.country
+                    country: formData.country,
+                    city: formData.city
                 }
             }) : null,
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Erreur lors de la création du compte');
+                }
+            })
             .then(() => {
-                toast.success('Compte créer veuillez vous connecter', {
+                toast.success('Compte créé, veuillez vous connecter', {
                     position: "top-right",
                     autoClose: 1500,
                     hideProgressBar: true,
@@ -148,11 +172,20 @@ const SignupPage = () => {
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
+            })
+            .catch((error) => {
+                toast.error('Erreur lors de la création du compte', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
             });
     };
-    //
-    // useEffect(() => {
-    // }, [formData]);
 
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value});
@@ -160,6 +193,7 @@ const SignupPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // Faites quelque chose avec les données d'inscription, par exemple envoyer une requête au serveur
         // Faites quelque chose avec les données d'inscription, par exemple envoyer une requête au serveur
         // Réinitialisez les champs du formulaire
         setFormData({
@@ -171,6 +205,7 @@ const SignupPage = () => {
             houseNum: '',
             postalCode: '',
             country: '',
+            city:''
         });
         sendForm(formData);
     };
@@ -320,6 +355,18 @@ const SignupPage = () => {
                                                                     />
                                                                 </Form.Group>
                                                             </Col>
+                                                            <Col>
+                                                                <Form.Group controlId="city">
+                                                                    <Form.Label>Ville:</Form.Label>
+                                                                    <Form.Control
+                                                                        type="text"
+                                                                        name="city"
+                                                                        value={formData.city}
+                                                                        onChange={handleChange}
+                                                                        required
+                                                                    />
+                                                                </Form.Group>
+                                                            </Col>
                                                         </Row>
                                                         <Row>
                                                             <Col>
@@ -352,7 +399,7 @@ const SignupPage = () => {
 
                                             </Col>
                                         </Row>
-                                        <Button type="submit" type="submit">S'inscrire</Button>
+                                        <Button type="submit">S'inscrire</Button>
                                         <p className="mt-4">Déja inscrit ? <Button
                                             onClick={() => setShowRegistrationForm(false)}>Connectez vous</Button></p>
                                     </Form>
@@ -363,7 +410,6 @@ const SignupPage = () => {
 
             <ToastContainer/>
         </>
-
     );
 };
 

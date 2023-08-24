@@ -37,6 +37,26 @@ function ArticlesCard(props){
             theme: 'colored',
         });
     }
+    const [imageSrc, setImageSrc] = React.useState(null);
+
+    React.useEffect(() => {
+        if (props.products.ImageData) {
+            const arrayBufferView = new Uint8Array(props.products.ImageData.data);
+            const blob = new Blob([arrayBufferView], { type: props.products.ImageType });
+            const urlCreator = window.URL;
+            const imageUrl = urlCreator.createObjectURL(blob);
+            setImageSrc(imageUrl);
+        }
+    }, [props.products.ImageData, props.products.ImageType]);
+
+//     function addBasket (){
+//         const productId = props.products.ProductID;
+//         const quantity = 1;
+//         const userId = 1;
+//         fetch(BASKET_URL + `/add/${userId}/${productId}/${quantity}`, {
+//            method: 'POST',
+//         })
+//     }
 
     const  addBasket = async () =>  {
         if(userData){
@@ -114,7 +134,11 @@ function ArticlesCard(props){
                             </Row>
                         </Col>
                         <Col xs={3} md={2} lg={3} xl={3} xxl={2}>
-                            <img src={NoImg} className='articlesimg' alt='No Images'></img>
+                            {imageSrc ? (
+                                <img src={imageSrc} className="articlesimg" alt={props.products.ProductName} />
+                            ) : (
+                                <img src={NoImg} className="articlesimg" alt="No Images" />
+                            )}
                         </Col>
                     </Row>
                 </Card.Body>

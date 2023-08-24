@@ -9,6 +9,15 @@ CREATE TABLE Users (
     PRIMARY KEY (UserID)
 );
 
+CREATE TABLE Images (
+    ImageID INT NOT NULL AUTO_INCREMENT,
+    ImageName VARCHAR(100),
+    ImageSize INT,
+    ImageType VARCHAR(20),
+    ImageData LONGBLOB,
+    PRIMARY KEY (ImageID)
+);
+
 CREATE TABLE Products (
     ProductID INT NOT NULL AUTO_INCREMENT,
     ProductName VARCHAR(60),
@@ -16,7 +25,9 @@ CREATE TABLE Products (
     ProductDesc TEXT,
     ProductPrice DECIMAL(6,2),
     ProductOnSale BOOLEAN,
-    PRIMARY KEY (ProductID)
+    ProductImageID INT,
+    PRIMARY KEY (ProductID),
+    FOREIGN KEY (ProductImageID) REFERENCES Images(ImageID) 
 );
 
 CREATE TABLE Addresses (
@@ -46,6 +57,13 @@ CREATE TABLE Orders (
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
     FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID)
+);
+
+CREATE TABLE OrderArticle (
+    OrderId INT,
+    ProductID INT,
+    FOREIGN KEY (OrderId) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 
 CREATE TABLE Baskets (
@@ -78,3 +96,24 @@ CREATE TABLE AdminUsers (
     AdminAccess BOOLEAN,
     PRIMARY KEY (AdminUserID)
 );
+
+CREATE TABLE Orders (
+    OrderID INT NOT NULL AUTO_INCREMENT,
+    UserID INT,
+    ProductID INT,
+    OrderSubtotal INT,
+    OrderDate DATE,
+    SubscriptionID INT,
+    PaidDate DATE,
+    DeliveryDate DATE,
+    WasPaid BOOLEAN DEFAULT false,
+    WasDelivered BOOLEAN DEFAULT false,
+    WasCancelled BOOLEAN DEFAULT false,
+    NumItems INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (OrderID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID)
+);
+
+
