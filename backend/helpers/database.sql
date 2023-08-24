@@ -45,7 +45,7 @@ CREATE TABLE Orders (
     OrderID INT NOT NULL AUTO_INCREMENT,
     UserID INT,
     ProductID INT,
-    OrderSubtotal INT,
+    OrderSubtotal FLOAT,
     OrderDate DATE,
     SubscriptionID INT,
     PaidDate DATE,
