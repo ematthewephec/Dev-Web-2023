@@ -18,7 +18,13 @@ app.use(cors({
 const { validationResult } = require('express-validator');
 
 router.get('/', async (req, res) => {
-    res.status(200).send("This is the user route of the API!");
+  try {
+    const userQuery = 'SELECT * FROM Users WHERE DeletionDate IS NULL;';
+    const rows = await pool.query(userQuery);
+    res.status(200).json(rows);
+} catch (error) {
+    res.status(404).send(error.message);
+}
 });
 
 router.get('/:id', async(req, res) => {

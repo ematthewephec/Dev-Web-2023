@@ -352,7 +352,7 @@ const SignupPage = () => {
 
                                             </Col>
                                         </Row>
-                                        <Button type="submit" type="submit">S'inscrire</Button>
+                                        <Button type="submit">S'inscrire</Button>
                                         <p className="mt-4">Déja inscrit ? <Button
                                             onClick={() => setShowRegistrationForm(false)}>Connectez vous</Button></p>
                                     </Form>
@@ -363,7 +363,6 @@ const SignupPage = () => {
 
             <ToastContainer/>
         </>
-
     );
 };
 
