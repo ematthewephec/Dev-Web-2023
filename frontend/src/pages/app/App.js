@@ -29,13 +29,13 @@ function App() {
             <Route path='/connect' element={<Connections/>}/>
             <Route path='/basket' element={<Basket/>}/>
             <Route path='/profile' element={<Profile/>}/>
+            <Route path='/orders' element={<Orders/>}/>
           </Route>
           <Route element={<AdminRoute/>}>
             <Route path="/admin" element={<AdminPage/>}/>
           </Route>
-          <Footer/>
         </Routes>
-
+        <Footer/>
       </Router>
     </div>
   );
