@@ -9,8 +9,11 @@ import AdminRoute from '../../components/utils/AdminRoute';
 import Articles from '../Articles/Articles';
 import Basket from '../Basket/Basket';
 import Connections from '../connections/Connections';
+
+import Orders from '../Orders/Orders';
 import AdminPage from '../Admin/AdminPage';
 import Profile from '../Profile/Profile';
+
 
 import Footer from '../../components/Footer/Footer';
 

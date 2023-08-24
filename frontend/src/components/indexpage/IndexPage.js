@@ -1,11 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import Card from 'react-bootstrap/Card';
+import { Container, Form, Button, Col, Row } from 'react-bootstrap';
 import {INDEX_URL} from '../utils/Constants';
 import Cookies from "js-cookie";
 //import './FrontPage.css';
+import { useNavigate  } from 'react-router-dom';
 
 function IndexPage(){
     const [title, setTitle] = useState("");
+    const navigate = useNavigate();
+
+    const redirectToOrders = () => {
+        navigate('/orders');
+    };
+
 
     const userDataString = Cookies.get('userData');
     let userData = null; // Initialisez userData avec null par défaut
@@ -35,6 +43,12 @@ function IndexPage(){
                     <Card.Text>
                         {title}
                     </Card.Text>
+                    {userData ?
+                        <div>
+                            <Button onClick={() => redirectToOrders()}>Mes commandes</Button>
+                        </div>
+                        :null
+                    }
                 </Card.Body>
             </Card>
         </div>

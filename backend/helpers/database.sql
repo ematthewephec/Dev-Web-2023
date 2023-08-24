@@ -41,6 +41,31 @@ CREATE TABLE Addresses (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
+CREATE TABLE Orders (
+    OrderID INT NOT NULL AUTO_INCREMENT,
+    UserID INT,
+    ProductID INT,
+    OrderSubtotal INT,
+    OrderDate DATE,
+    SubscriptionID INT,
+    PaidDate DATE,
+    DeliveryDate DATE,
+    WasPaid BOOLEAN DEFAULT false,
+    WasDelivered BOOLEAN DEFAULT false,
+    NumItems INT NOT NULL DEFAULT 1,
+    PRIMARY KEY (OrderID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID)
+);
+
+CREATE TABLE OrderArticle (
+    OrderId INT,
+    ProductID INT,
+    FOREIGN KEY (OrderId) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
 CREATE TABLE Baskets (
     UserID INT,
     ItemIndex INT NOT NULL AUTO_INCREMENT,
@@ -90,4 +115,5 @@ CREATE TABLE Orders (
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
     FOREIGN KEY (SubscriptionID) REFERENCES Subscriptions(SubscriptionID)
 );
+
 

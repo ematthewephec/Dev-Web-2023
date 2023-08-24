@@ -19,7 +19,8 @@ const products = require('./routes/product');
 const facture = require('./routes/facture');
 const baskets = require('./routes/basket');
 const users = require('./routes/user');
-const orders = require('./routes/order');
+const orders = require('./routes/orders');
+
 
 const app = express();
 
