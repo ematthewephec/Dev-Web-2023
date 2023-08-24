@@ -62,13 +62,14 @@ router.post('/validate', async(req, res) => {
     try {
         const userId = req.body.id;
 
-        const createOrderQuery = 'INSERT INTO Orders (UserID, OrderSubtotal) VALUES (?, ?)';
-        const createOrderResult = await pool.query(createOrderQuery, [userId, 0]); // Initial price total
+        const createOrderQuery = 'INSERT INTO Orders (UserID, OrderSubtotal, OrderDate) VALUES (?, ?, ?)';
+        const createOrderResult = await pool.query(createOrderQuery, [userId, 0,req.body.orderDate]); // Initial price total
         const orderId = createOrderResult.insertId;
 
         const basketQuery = 'SELECT * FROM Baskets WHERE UserID = ?';
         const basketResult = await pool.query(basketQuery, [userId]);
         const basketItems = basketResult[0];
+        const currentDateTime = new Date().toISOString();
 
         let totalPrice = 0; // Initialize total price
 

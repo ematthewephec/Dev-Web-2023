@@ -100,12 +100,13 @@ function BasketList(props) {
 
     const handleSubmit  = async (event)  => {
         if (userData) {
+            const currentDate = new Date().toISOString().split('T')[0];
             const response = await fetch(`${BASKET_URL}/validate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: userData.idUser }),
+                body: JSON.stringify({ id: userData.idUser,  orderDate: currentDate }),
             });
             if(response.ok){
                 toast.success('Commande envoyée', {

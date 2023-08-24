@@ -15,10 +15,6 @@ function Orders() {
         navigate('/connect');
     };
 
-    const reditrectHome = () => {
-        navigate('/');
-    };
-
     const userDataString = Cookies.get('userData');
     const [ordersData, setOrdersData] = useState([]);
     const [sortAscending, setSortAscending] = useState(true);
