@@ -10,6 +10,9 @@ import Articles from '../Articles/Articles';
 import Basket from '../Basket/Basket';
 import Connections from '../connections/Connections';
 import AdminPage from '../Admin/AdminPage';
+import Profile from '../Profile/Profile';
+
+import Footer from '../../components/Footer/Footer';
 
 
 function App() {
@@ -22,11 +25,14 @@ function App() {
             <Route path='/articles' element={<Articles/>}/>
             <Route path='/connect' element={<Connections/>}/>
             <Route path='/basket' element={<Basket/>}/>
+            <Route path='/profile' element={<Profile/>}/>
           </Route>
           <Route element={<AdminRoute/>}>
             <Route path="/admin" element={<AdminPage/>}/>
           </Route>
+          <Footer/>
         </Routes>
+
       </Router>
     </div>
   );
