@@ -5,9 +5,12 @@ import Modal from 'react-bootstrap/Modal';
 import {ToastContainer, toast} from "react-toastify";
 import {BASKET_URL} from "../utils/Constants";
 import Cookies from "js-cookie";
+import { useNavigate  } from 'react-router-dom';
 
 function BasketList(props) {
+    const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+    const [showModalConnect, setShowModalConnect] = useState(false);
     const [basket, setBasket] = useState([]);
     const userDataString = Cookies.get('userData');
     let userData = null; // Initialisez userData avec null par défaut
@@ -42,11 +45,29 @@ function BasketList(props) {
         }, 800);
     }
 
+    const addToBasket = async (localCart) => {
+        for (const item of localCart) {
+            const {itemId, ProductName, ProductPrice, ItemQuantity} = item;
+            // Utilisez votre route pour ajouter les éléments au panier en base de données
+            const response = await fetch(`${BASKET_URL}/add/${userData.idUser}/${itemId}/${ItemQuantity}`, {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+               window.location.reload()
+            }
+        }
+    };
 
     useEffect(() => {
         if (userData) {
             // Si l'utilisateur est connecté, mettez à jour le panier avec les données du panier utilisateur
             setBasket(props.basket);
+            const localCart = getLocalCart();
+            if (localCart.length > 0) {
+                addToBasket(localCart); // Assurez-vous que addToBasket ajoute correctement les éléments au panier
+                localStorage.removeItem('localCart');
+            }
         } else {
             // Si l'utilisateur n'est pas connecté, récupérez les données du panier local
             const localCart = getLocalCart();
@@ -117,6 +138,7 @@ function BasketList(props) {
 
         } else {
             // Gérer le cas où userData est null
+            setShowModalConnect(true);
             console.error('userData is null');
         }
 
@@ -136,6 +158,13 @@ function BasketList(props) {
         setShowModal(false);
     };
 
+    const handleModalConnectClose = () => {
+        setShowModalConnect(false);
+        setShowModal(false);
+    };
+
+
+
     function clearCart(){
         localStorage.removeItem('localCart');
         toast.success('Panier vider ', {
@@ -152,6 +181,10 @@ function BasketList(props) {
             window.location.reload();
         }, 500);
     }
+
+    const redirectToLoginPage = () => {
+        navigate('/connect');
+    };
 
     const subtotal = basket.reduce((acc, obj) => acc + Number((obj.ProductPrice * obj.ItemQuantity).toFixed(2)), 0).toFixed(2);
 
@@ -206,6 +239,24 @@ function BasketList(props) {
                         Valider
                     </button>
                     <Button onClick={() => setShowModal(!showModal)}>Fermer</Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showModalConnect} onHide={handleModalConnectClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Connectez-vous pour valider votre panier</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Connectez-vous à votre compte pour valider votre panier.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        type="button"
+                        className="btn btn-success"
+                        onClick={redirectToLoginPage}
+                    >
+                        Se connecter
+                    </Button>
+                    <Button onClick={handleModalConnectClose}>Fermer</Button>
                 </Modal.Footer>
             </Modal>
             <ToastContainer />
