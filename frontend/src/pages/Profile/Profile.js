@@ -356,6 +356,46 @@ function Profile() {
                                 />
                             </Col>
                         </Form.Group>
+                        {resetPasswordClicked ? (
+                            <Form  className="password-reset-form">
+                                {/* ... (autres champs) */}
+                                <Form.Group controlId='newPassword'>
+                                    <Form.Label>Nouveau mot de passe :</Form.Label>
+                                    <Col sm={4} className="mx-auto">
+                                        <Form.Control
+                                            type='password'
+                                            value={newPassword}
+                                            onChange={(e) => setNewPassword(e.target.value)}
+                                        />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group controlId='confirmNewPassword'>
+                                    <Form.Label>Confirmer le nouveau mot de passe :</Form.Label>
+                                    <Col sm={4} className="mx-auto">
+                                        <Form.Control
+                                            type='password'
+                                            value={confirmNewPassword}
+                                            onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                        />
+                                    </Col>
+                                </Form.Group>
+                                <div className="mt-2">
+                                    <Button variant='primary'  className="btn-sm" onClick={() => setResetPasswordClicked(false)}>
+                                        Annuler
+                                    </Button>
+                                </div>
+                                <Button variant='primary' type='submit' className="mt-2" onClick={handlePasswordChange}>
+                                    Réinitialiser le mot de passe
+                                </Button>
+                            </Form>
+                        ) : (
+                            <div>
+                                <p className='mt-4'>
+                                    Changer votre mot de passe ?{' '}
+                                    <Button className="btn-sm" onClick={handleResetPasswordClick}>Réinitialiser</Button>
+                                </p>
+                            </div>
+                        )}
                         {profileModify ?
                             <Button variant='primary' type='submit' disabled={!profileModify} className='mt-2'>
                                 Enregistrer
@@ -380,45 +420,45 @@ function Profile() {
                             <Button variant='primary' onClick={() => setProfileModify(true)} className='mt-2'>
                                 Modifier
                             </Button>
-                            {resetPasswordClicked ? (
-                                <Form>
-                                    <Form.Group controlId='newPassword'>
-                                        <Form.Label>Nouveau mot de passe :</Form.Label>
-                                        <Col sm={4} className="mx-auto">
-                                        <Form.Control
-                                            type='password'
-                                            value={newPassword}
-                                            onChange={(e) => setNewPassword(e.target.value)}
-                                        />
-                                        </Col>
-                                    </Form.Group>
-                                    <Form.Group controlId='confirmNewPassword'>
-                                        <Form.Label>Confirmer le nouveau mot de passe :</Form.Label>
-                                        <Col sm={4} className="mx-auto">
-                                        <Form.Control
-                                            type='password'
-                                            value={confirmNewPassword}
-                                            onChange={(e) => setConfirmNewPassword(e.target.value)}
-                                        />
-                                        </Col>
-                                    </Form.Group>
-                                    <div className="mt-2">
-                                        <Button variant='primary'  className="btn-sm" onClick={() => setResetPasswordClicked(false)}>
-                                            Annuler
-                                        </Button>
-                                    </div>
-                                    <Button variant='primary' type='submit' className="mt-2" onClick={handlePasswordChange}>
-                                        Réinitialiser le mot de passe
-                                    </Button>
-                                </Form>
-                            ) : (
-                                <div>
-                                    <p className='mt-4'>
-                                        Changer votre mot de passe ?{' '}
-                                        <Button className="btn-sm" onClick={handleResetPasswordClick}>Réinitialiser</Button>
-                                    </p>
-                                </div>
-                            )}
+                            {/*{resetPasswordClicked ? (*/}
+                            {/*    <Form>*/}
+                            {/*        <Form.Group controlId='newPassword'>*/}
+                            {/*            <Form.Label>Nouveau mot de passe :</Form.Label>*/}
+                            {/*            <Col sm={4} className="mx-auto">*/}
+                            {/*            <Form.Control*/}
+                            {/*                type='password'*/}
+                            {/*                value={newPassword}*/}
+                            {/*                onChange={(e) => setNewPassword(e.target.value)}*/}
+                            {/*            />*/}
+                            {/*            </Col>*/}
+                            {/*        </Form.Group>*/}
+                            {/*        <Form.Group controlId='confirmNewPassword'>*/}
+                            {/*            <Form.Label>Confirmer le nouveau mot de passe :</Form.Label>*/}
+                            {/*            <Col sm={4} className="mx-auto">*/}
+                            {/*            <Form.Control*/}
+                            {/*                type='password'*/}
+                            {/*                value={confirmNewPassword}*/}
+                            {/*                onChange={(e) => setConfirmNewPassword(e.target.value)}*/}
+                            {/*            />*/}
+                            {/*            </Col>*/}
+                            {/*        </Form.Group>*/}
+                            {/*        <div className="mt-2">*/}
+                            {/*            <Button variant='primary'  className="btn-sm" onClick={() => setResetPasswordClicked(false)}>*/}
+                            {/*                Annuler*/}
+                            {/*            </Button>*/}
+                            {/*        </div>*/}
+                            {/*        <Button variant='primary' type='submit' className="mt-2" onClick={handlePasswordChange}>*/}
+                            {/*            Réinitialiser le mot de passe*/}
+                            {/*        </Button>*/}
+                            {/*    </Form>*/}
+                            {/*) : (*/}
+                            {/*    <div>*/}
+                            {/*        <p className='mt-4'>*/}
+                            {/*            Changer votre mot de passe ?{' '}*/}
+                            {/*            <Button className="btn-sm" onClick={handleResetPasswordClick}>Réinitialiser</Button>*/}
+                            {/*        </p>*/}
+                            {/*    </div>*/}
+                            {/*)}*/}
                         </div>
                     )}
                 </Container>

@@ -9,3 +9,6 @@
     color: white;
     font-size: 1.2em;
 }
+.content {
+    padding-bottom: 150px; /* Ajustez cette valeur en fonction de la hauteur de votre footer */
+}

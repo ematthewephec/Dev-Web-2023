@@ -1,0 +1,4 @@
+.password-reset-form {
+    position: relative;
+    z-index: 1000; /* Ajustez ce nombre en fonction de vos besoins */
+}

@@ -35,7 +35,6 @@ function App() {
             <Route path="/admin" element={<AdminPage/>}/>
           </Route>
         </Routes>
-        <Footer/>
       </Router>
     </div>
   );

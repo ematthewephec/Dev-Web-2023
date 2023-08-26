@@ -7,7 +7,9 @@ const BasicNavbar = () => {
     return(
         <>
             <Navigation />
-            <Outlet />
+            <div className="content">
+             <Outlet  />
+            </div>
             <Footer />
         </>
     )
