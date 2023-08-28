@@ -1,0 +1,28 @@
+.footer {
+    background-color: #CD4153;
+    /*position: relative;*/
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    /* Ajoutez ces propriétés pour le positionnement fixe au bas */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.footer .container{
+    column-count: 2;
+}
+.logo {
+    display: flex;
+  }
+
+  .social-media {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .social-media img {
+    margin-left: 10px;
+  }
